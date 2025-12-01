@@ -13,7 +13,7 @@ model Subscription {
 }
 
 model Payment {
-    id             String        @id @default(cuid())
+    id             String        @id @default(uuid())
     subscription   Subscription  @relation(fields: [subscriptionId], references: [id])
     subscriptionId String        @unique
     amount         Float

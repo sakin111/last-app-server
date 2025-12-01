@@ -1,8 +1,12 @@
-
-
 enum Role {
   USER
   ADMIN
+}
+
+enum UserStatus {
+    ACTIVE
+    INACTIVE
+    DELETED
 }
 
 enum TravelType {

@@ -2,6 +2,9 @@
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
 -- CreateEnum
+CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'DELETED');
+
+-- CreateEnum
 CREATE TYPE "TravelType" AS ENUM ('SOLO', 'FAMILY', 'FRIENDS');
 
 -- CreateEnum
@@ -39,6 +42,29 @@ CREATE TABLE "payment" (
 );
 
 -- CreateTable
+CREATE TABLE "request" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "travelPlanId" TEXT NOT NULL,
+    "status" "RequestStatus" NOT NULL DEFAULT 'PENDING',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "request_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "reviews" (
+    "id" TEXT NOT NULL,
+    "rating" INTEGER NOT NULL,
+    "comment" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "authorId" TEXT NOT NULL,
+    "targetId" TEXT NOT NULL,
+
+    CONSTRAINT "reviews_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "travelPlan" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -64,6 +90,7 @@ CREATE TABLE "users" (
     "fullName" TEXT NOT NULL,
     "profileImage" TEXT,
     "bio" TEXT,
+    "userStatus" "UserStatus" NOT NULL,
     "travelInterests" TEXT[],
     "visitedCountries" TEXT[],
     "currentLocation" TEXT,
@@ -88,29 +115,6 @@ CREATE TABLE "admins" (
     CONSTRAINT "admins_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "reviews" (
-    "id" TEXT NOT NULL,
-    "rating" INTEGER NOT NULL,
-    "comment" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "authorId" TEXT NOT NULL,
-    "targetId" TEXT NOT NULL,
-
-    CONSTRAINT "reviews_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "request" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "travelPlanId" TEXT NOT NULL,
-    "status" "RequestStatus" NOT NULL DEFAULT 'PENDING',
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "request_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "subscription_userId_key" ON "subscription"("userId");
 
@@ -118,13 +122,13 @@ CREATE UNIQUE INDEX "subscription_userId_key" ON "subscription"("userId");
 CREATE UNIQUE INDEX "payment_subscriptionId_key" ON "payment"("subscriptionId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "request_userId_key" ON "request"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "admins_email_key" ON "admins"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "request_userId_key" ON "request"("userId");
 
 -- AddForeignKey
 ALTER TABLE "subscription" ADD CONSTRAINT "subscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -133,10 +137,10 @@ ALTER TABLE "subscription" ADD CONSTRAINT "subscription_userId_fkey" FOREIGN KEY
 ALTER TABLE "payment" ADD CONSTRAINT "payment_subscriptionId_fkey" FOREIGN KEY ("subscriptionId") REFERENCES "subscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "travelPlan" ADD CONSTRAINT "travelPlan_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "request" ADD CONSTRAINT "request_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "admins" ADD CONSTRAINT "admins_email_fkey" FOREIGN KEY ("email") REFERENCES "users"("email") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "request" ADD CONSTRAINT "request_travelPlanId_fkey" FOREIGN KEY ("travelPlanId") REFERENCES "travelPlan"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "reviews" ADD CONSTRAINT "reviews_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -145,7 +149,7 @@ ALTER TABLE "reviews" ADD CONSTRAINT "reviews_authorId_fkey" FOREIGN KEY ("autho
 ALTER TABLE "reviews" ADD CONSTRAINT "reviews_targetId_fkey" FOREIGN KEY ("targetId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "request" ADD CONSTRAINT "request_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "travelPlan" ADD CONSTRAINT "travelPlan_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "request" ADD CONSTRAINT "request_travelPlanId_fkey" FOREIGN KEY ("travelPlanId") REFERENCES "travelPlan"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "admins" ADD CONSTRAINT "admins_email_fkey" FOREIGN KEY ("email") REFERENCES "users"("email") ON DELETE RESTRICT ON UPDATE CASCADE;

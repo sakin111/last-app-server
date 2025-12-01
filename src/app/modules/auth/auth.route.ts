@@ -1,8 +1,10 @@
 import express from "express"
 
 import { AuthController } from './auth.controller';
-import auth from "../../middlewares/auth";
-import { UserRole } from "@prisma/client";
+import { checkAuth } from "src/app/middleware/checkAuth";
+import { Role } from "@prisma/client";
+
+
 
 
 const router = express.Router();
@@ -21,10 +23,8 @@ router.post(
 
 router.post(
     '/change-password',
-    auth(
-        UserRole.ADMIN,
-        UserRole.DOCTOR,
-        UserRole.PATIENT
+    checkAuth(
+        Role.ADMIN, Role.USER
     ),
     AuthController.changePassword
 );

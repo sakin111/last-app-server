@@ -1,7 +1,6 @@
 
-
 model TravelPlan {
-  id            String   @id @default(cuid())
+  id            String   @id @default(uuid())
   title         String
   destination   String
   startDate     DateTime
