@@ -1,0 +1,20 @@
+
+
+model TravelPlan {
+  id            String   @id @default(cuid())
+  title         String
+  destination   String
+  startDate     DateTime
+  endDate       DateTime
+  budgetRange   String
+  travelType    TravelType
+  description   String
+  visibility    Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  author        User      @relation(fields: [authorId], references: [id])
+  authorId      String
+  requests      Request[]
+
+   @@map("travelPlan")
+}
