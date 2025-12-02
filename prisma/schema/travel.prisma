@@ -9,6 +9,7 @@ model TravelPlan {
   travelType    TravelType
   description   String
   visibility    Boolean   @default(true)
+  images        String[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   author        User      @relation(fields: [authorId], references: [id])

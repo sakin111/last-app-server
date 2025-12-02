@@ -12,6 +12,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.0.1",
     "@prisma/client": "^7.0.1",
+    "@types/multer": "^2.0.0",
     "@types/nodemailer": "^7.0.4",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.8.0",
@@ -21,7 +22,9 @@
     "express": "^5.1.0",
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
     "pg": "^8.16.3",
+    "stripe": "^20.0.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {

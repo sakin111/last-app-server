@@ -26,6 +26,15 @@ export const UserStatus = {
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
+export const Status = {
+  SUCCESS: 'SUCCESS',
+  CANCEL: 'CANCEL',
+  PENDING: 'PENDING'
+} as const
+
+export type Status = (typeof Status)[keyof typeof Status]
+
+
 export const TravelType = {
   SOLO: 'SOLO',
   FAMILY: 'FAMILY',

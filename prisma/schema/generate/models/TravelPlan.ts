@@ -64,6 +64,7 @@ export type TravelPlanCountAggregateOutputType = {
   travelType: number
   description: number
   visibility: number
+  images: number
   createdAt: number
   updatedAt: number
   authorId: number
@@ -111,6 +112,7 @@ export type TravelPlanCountAggregateInputType = {
   travelType?: true
   description?: true
   visibility?: true
+  images?: true
   createdAt?: true
   updatedAt?: true
   authorId?: true
@@ -199,6 +201,7 @@ export type TravelPlanGroupByOutputType = {
   travelType: $Enums.TravelType
   description: string
   visibility: boolean
+  images: string[]
   createdAt: Date
   updatedAt: Date
   authorId: string
@@ -235,6 +238,7 @@ export type TravelPlanWhereInput = {
   travelType?: Prisma.EnumTravelTypeFilter<"TravelPlan"> | $Enums.TravelType
   description?: Prisma.StringFilter<"TravelPlan"> | string
   visibility?: Prisma.BoolFilter<"TravelPlan"> | boolean
+  images?: Prisma.StringNullableListFilter<"TravelPlan">
   createdAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
   authorId?: Prisma.StringFilter<"TravelPlan"> | string
@@ -252,6 +256,7 @@ export type TravelPlanOrderByWithRelationInput = {
   travelType?: Prisma.SortOrder
   description?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
+  images?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
@@ -272,6 +277,7 @@ export type TravelPlanWhereUniqueInput = Prisma.AtLeast<{
   travelType?: Prisma.EnumTravelTypeFilter<"TravelPlan"> | $Enums.TravelType
   description?: Prisma.StringFilter<"TravelPlan"> | string
   visibility?: Prisma.BoolFilter<"TravelPlan"> | boolean
+  images?: Prisma.StringNullableListFilter<"TravelPlan">
   createdAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
   authorId?: Prisma.StringFilter<"TravelPlan"> | string
@@ -289,6 +295,7 @@ export type TravelPlanOrderByWithAggregationInput = {
   travelType?: Prisma.SortOrder
   description?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
+  images?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
@@ -310,6 +317,7 @@ export type TravelPlanScalarWhereWithAggregatesInput = {
   travelType?: Prisma.EnumTravelTypeWithAggregatesFilter<"TravelPlan"> | $Enums.TravelType
   description?: Prisma.StringWithAggregatesFilter<"TravelPlan"> | string
   visibility?: Prisma.BoolWithAggregatesFilter<"TravelPlan"> | boolean
+  images?: Prisma.StringNullableListFilter<"TravelPlan">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TravelPlan"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TravelPlan"> | Date | string
   authorId?: Prisma.StringWithAggregatesFilter<"TravelPlan"> | string
@@ -325,6 +333,7 @@ export type TravelPlanCreateInput = {
   travelType: $Enums.TravelType
   description: string
   visibility?: boolean
+  images?: Prisma.TravelPlanCreateimagesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutTravelPlansInput
@@ -341,6 +350,7 @@ export type TravelPlanUncheckedCreateInput = {
   travelType: $Enums.TravelType
   description: string
   visibility?: boolean
+  images?: Prisma.TravelPlanCreateimagesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   authorId: string
@@ -357,6 +367,7 @@ export type TravelPlanUpdateInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutTravelPlansNestedInput
@@ -373,6 +384,7 @@ export type TravelPlanUncheckedUpdateInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -389,6 +401,7 @@ export type TravelPlanCreateManyInput = {
   travelType: $Enums.TravelType
   description: string
   visibility?: boolean
+  images?: Prisma.TravelPlanCreateimagesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   authorId: string
@@ -404,6 +417,7 @@ export type TravelPlanUpdateManyMutationInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -418,6 +432,7 @@ export type TravelPlanUncheckedUpdateManyInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -426,6 +441,14 @@ export type TravelPlanUncheckedUpdateManyInput = {
 export type TravelPlanScalarRelationFilter = {
   is?: Prisma.TravelPlanWhereInput
   isNot?: Prisma.TravelPlanWhereInput
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type TravelPlanCountOrderByAggregateInput = {
@@ -438,6 +461,7 @@ export type TravelPlanCountOrderByAggregateInput = {
   travelType?: Prisma.SortOrder
   description?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
+  images?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
@@ -497,8 +521,17 @@ export type TravelPlanUpdateOneRequiredWithoutRequestsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TravelPlanUpdateToOneWithWhereWithoutRequestsInput, Prisma.TravelPlanUpdateWithoutRequestsInput>, Prisma.TravelPlanUncheckedUpdateWithoutRequestsInput>
 }
 
+export type TravelPlanCreateimagesInput = {
+  set: string[]
+}
+
 export type EnumTravelTypeFieldUpdateOperationsInput = {
   set?: $Enums.TravelType
+}
+
+export type TravelPlanUpdateimagesInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type TravelPlanCreateNestedManyWithoutAuthorInput = {
@@ -553,6 +586,7 @@ export type TravelPlanCreateWithoutRequestsInput = {
   travelType: $Enums.TravelType
   description: string
   visibility?: boolean
+  images?: Prisma.TravelPlanCreateimagesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutTravelPlansInput
@@ -568,6 +602,7 @@ export type TravelPlanUncheckedCreateWithoutRequestsInput = {
   travelType: $Enums.TravelType
   description: string
   visibility?: boolean
+  images?: Prisma.TravelPlanCreateimagesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   authorId: string
@@ -599,6 +634,7 @@ export type TravelPlanUpdateWithoutRequestsInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutTravelPlansNestedInput
@@ -614,6 +650,7 @@ export type TravelPlanUncheckedUpdateWithoutRequestsInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -629,6 +666,7 @@ export type TravelPlanCreateWithoutAuthorInput = {
   travelType: $Enums.TravelType
   description: string
   visibility?: boolean
+  images?: Prisma.TravelPlanCreateimagesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   requests?: Prisma.RequestCreateNestedManyWithoutTravelPlanInput
@@ -644,6 +682,7 @@ export type TravelPlanUncheckedCreateWithoutAuthorInput = {
   travelType: $Enums.TravelType
   description: string
   visibility?: boolean
+  images?: Prisma.TravelPlanCreateimagesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   requests?: Prisma.RequestUncheckedCreateNestedManyWithoutTravelPlanInput
@@ -688,6 +727,7 @@ export type TravelPlanScalarWhereInput = {
   travelType?: Prisma.EnumTravelTypeFilter<"TravelPlan"> | $Enums.TravelType
   description?: Prisma.StringFilter<"TravelPlan"> | string
   visibility?: Prisma.BoolFilter<"TravelPlan"> | boolean
+  images?: Prisma.StringNullableListFilter<"TravelPlan">
   createdAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TravelPlan"> | Date | string
   authorId?: Prisma.StringFilter<"TravelPlan"> | string
@@ -703,6 +743,7 @@ export type TravelPlanCreateManyAuthorInput = {
   travelType: $Enums.TravelType
   description: string
   visibility?: boolean
+  images?: Prisma.TravelPlanCreateimagesInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -717,6 +758,7 @@ export type TravelPlanUpdateWithoutAuthorInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requests?: Prisma.RequestUpdateManyWithoutTravelPlanNestedInput
@@ -732,6 +774,7 @@ export type TravelPlanUncheckedUpdateWithoutAuthorInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requests?: Prisma.RequestUncheckedUpdateManyWithoutTravelPlanNestedInput
@@ -747,6 +790,7 @@ export type TravelPlanUncheckedUpdateManyWithoutAuthorInput = {
   travelType?: Prisma.EnumTravelTypeFieldUpdateOperationsInput | $Enums.TravelType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  images?: Prisma.TravelPlanUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -792,6 +836,7 @@ export type TravelPlanSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   travelType?: boolean
   description?: boolean
   visibility?: boolean
+  images?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   authorId?: boolean
@@ -810,6 +855,7 @@ export type TravelPlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   travelType?: boolean
   description?: boolean
   visibility?: boolean
+  images?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   authorId?: boolean
@@ -826,6 +872,7 @@ export type TravelPlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   travelType?: boolean
   description?: boolean
   visibility?: boolean
+  images?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   authorId?: boolean
@@ -842,12 +889,13 @@ export type TravelPlanSelectScalar = {
   travelType?: boolean
   description?: boolean
   visibility?: boolean
+  images?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   authorId?: boolean
 }
 
-export type TravelPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "destination" | "startDate" | "endDate" | "budgetRange" | "travelType" | "description" | "visibility" | "createdAt" | "updatedAt" | "authorId", ExtArgs["result"]["travelPlan"]>
+export type TravelPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "destination" | "startDate" | "endDate" | "budgetRange" | "travelType" | "description" | "visibility" | "images" | "createdAt" | "updatedAt" | "authorId", ExtArgs["result"]["travelPlan"]>
 export type TravelPlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   requests?: boolean | Prisma.TravelPlan$requestsArgs<ExtArgs>
@@ -876,6 +924,7 @@ export type $TravelPlanPayload<ExtArgs extends runtime.Types.Extensions.Internal
     travelType: $Enums.TravelType
     description: string
     visibility: boolean
+    images: string[]
     createdAt: Date
     updatedAt: Date
     authorId: string
@@ -1313,6 +1362,7 @@ export interface TravelPlanFieldRefs {
   readonly travelType: Prisma.FieldRef<"TravelPlan", 'TravelType'>
   readonly description: Prisma.FieldRef<"TravelPlan", 'String'>
   readonly visibility: Prisma.FieldRef<"TravelPlan", 'Boolean'>
+  readonly images: Prisma.FieldRef<"TravelPlan", 'String[]'>
   readonly createdAt: Prisma.FieldRef<"TravelPlan", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TravelPlan", 'DateTime'>
   readonly authorId: Prisma.FieldRef<"TravelPlan", 'String'>

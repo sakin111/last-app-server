@@ -8,15 +8,14 @@ import globalErrorHandler from "./app/error/globalErrorHandler";
 
 const app: Application = express();
 
-
-// app.post(
-//     "/webhook",
-//     express.raw({ type: "application/json" }),
-//     PaymentController.createPayment
-// );
 app.use(cors());
 
-//parser
+app.use(
+    "/api/v1/payment/webhook",
+    express.raw({ type: "application/json" })
+);
+
+// parser
 app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
