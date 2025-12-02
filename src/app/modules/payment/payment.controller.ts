@@ -19,7 +19,7 @@ const checkoutSession = catchAsync(async (req: Request & { user?: any }, res: Re
   const user = req.user;
   const { stripePriceId, plan } = req.body;
   
-  // Get base URL from request
+
   const protocol = req.protocol;
   const host = req.get("host");
   const baseUrl = `${protocol}://${host}`;

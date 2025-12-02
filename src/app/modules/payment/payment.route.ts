@@ -8,7 +8,7 @@ import { WebhookController } from "./webhook.controller";
 
 const router = express.Router();
 
-// Webhook endpoint (no auth needed - Stripe verifies signature)
+
 router.post("/webhook", express.raw({ type: "application/json" }), WebhookController.stripeWebhook);
 
 router.post("/subscribe", checkAuth(Role.USER, Role.ADMIN), validateRequest(PaymentValidation.createSubscriptionValidationSchema), PaymentController.subscribe);
