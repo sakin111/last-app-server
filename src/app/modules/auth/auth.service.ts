@@ -1,7 +1,6 @@
 
 import bcrypt from "bcryptjs"
 import httpStatus from "http-status"
-import emailSender from "./emailSender";
 import { generateToken, verifyTokens } from "../../shared/jwt";
 import { envVar } from "../../config/envVar";
 import AppError from "../../error/AppError";
@@ -96,39 +95,7 @@ const changePassword = async (user: any, payload: any) => {
     }
 };
 
-const forgotPassword = async (payload: { email: string }) => {
-    const userData = await prisma.user.findUniqueOrThrow({
-        where: {
-            email: payload.email,
-            userStatus: "ACTIVE"
-        }
-    });
 
-    const resetPassToken = generateToken(
-        { email: userData.email, role: userData.role },
-        envVar.JWT_ACCESS_SECRET as string,
-        envVar.JWT_RESET_EXPIRE_IN as string
-    )
-
-    const resetPassLink = envVar.RESET_PASS_LINK + `?userId=${userData.id}&token=${resetPassToken}`
-
-    await emailSender(
-        userData.email,
-        `
-        <div>
-            <p>Dear User,</p>
-            <p>Your password reset link 
-                <a href=${resetPassLink}>
-                    <button>
-                        Reset Password
-                    </button>
-                </a>
-            </p>
-
-        </div>
-        `
-    )
-};
 
 const resetPassword = async (token: string, payload: { id: string, password: string }) => {
 
@@ -187,7 +154,6 @@ export const AuthService = {
 login,
 refreshToken,
 changePassword,
-forgotPassword,
 resetPassword,
 getMe
 }

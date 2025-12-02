@@ -1,6 +1,8 @@
 import { Server } from 'http'
 import app from './app'
 import { envVar } from './app/config/envVar'
+import { prisma } from './app/shared/prisma'
+import { seedAdmin } from './app/shared/seedAdmin'
 
 
 
@@ -10,7 +12,7 @@ let server: Server
 
 const StartServer = async () =>{
     try {
-
+        await prisma.$connect()
         console.log("connected to DB")
         server = app.listen(envVar.PORT, () => {
             console.log(`server is running on the port ${envVar.PORT}` )
@@ -23,6 +25,7 @@ const StartServer = async () =>{
 
 (async() =>{
    await StartServer()
+   await seedAdmin()
 })()
 
 process.on("SIGTERM", (err) => {
@@ -52,3 +55,6 @@ process.on("uncaughtException", (err) => {
     }
     process.exit(1)
 })
+
+
+

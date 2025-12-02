@@ -1,40 +1,43 @@
 import bcryptjs from "bcryptjs";
 import { envVar } from "../config/envVar";
+import { prisma } from "./prisma";
+import { Role, User} from "@prisma/client";
+import { UserCreateInput } from "prisma/schema/generate/models";
 
 
 
 
-export const seedSuperAdmin = async () => {
+export const seedAdmin = async () => {
     try {
-        const isSuperAdminExist = await User.findOne({ email: envVar.ADMIN_EMAIL })
+        const isAdminExist = await prisma.user.findUniqueOrThrow({ 
+            where:{
+                email: envVar.ADMIN_EMAIL
+            }
+         })
 
-        if (isSuperAdminExist) {
+        if (isAdminExist) {
             console.log("Super Admin Already Exists!");
             return;
         }
 
-        console.log("Trying to create Super Admin...");
+        console.log("Trying to create Admin...");
 
-        const hashedPassword = await bcryptjs.hash(envVars.SUPER_ADMIN_PASSWORD, Number(envVars.BCRYPT_SALT_ROUND))
+        const hashedPassword = await bcryptjs.hash(envVar.ADMIN_PASS, Number(envVar.JWT_SALT))
 
-        const authProvider: IAuthProvider = {
-            provider: "credentials",
-            providerId: envVars.SUPER_ADMIN_EMAIL
-        }
+    
 
-        const payload: IUser = {
-            name: "Super admin",
-            role: Role.SUPER_ADMIN,
-            email: envVars.SUPER_ADMIN_EMAIL,
+        const payload:Partial<UserCreateInput>= {
+            name: "admin",
+            role: Role.ADMIN,
+            email: envVar.ADMIN_EMAIL,
             password: hashedPassword,
-            isVerified: true,
-            auths: [authProvider]
-
         }
 
-        const superadmin = await User.create(payload)
-        console.log("Super Admin Created Successfuly! \n");
-        console.log(superadmin);
+        const admin = await prisma.user.create({
+            data: payload as UserCreateInput
+        })
+        console.log("Super Admin Created Successfully \n");
+        console.log(admin);
     } catch (error) {
         console.log(error);
     }
