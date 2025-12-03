@@ -9,8 +9,7 @@ import { UserValidation } from './user.validation';
 const router = express.Router();
 
 router.post(
-    "/create-patient",
-    // fileUploader.upload.single('file'),
+    "/create-user",
     validateRequest(UserValidation.createUserValidationSchema),
     UserController.createUser
 ),

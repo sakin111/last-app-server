@@ -4,7 +4,7 @@ model User {
   name           String 
   email          String      @unique
   password       String
-  fullName       String
+  fullName       String?
   profileImage   String?
   bio            String?
   travelInterests String[]
@@ -15,7 +15,7 @@ model User {
   updatedAt      DateTime    @updatedAt
   travelPlans    TravelPlan[]
   reviewsGiven   Review[]    @relation("ReviewAuthor")
-  userStatus     UserStatus
+  userStatus     UserStatus  @default(ACTIVE)
   reviewsReceived Review[]   @relation("ReviewTarget")
   subscription   Subscription?
   admin          Admin?

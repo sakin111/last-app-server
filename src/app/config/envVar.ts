@@ -5,6 +5,7 @@ dotenv.config()
 export interface interConfig {
     PORT: string,
     NODE_ENV: "development" | "production",
+    DATABASE_URL: string,
     JWT_ACCESS_SECRET: string
     JWT_SALT: string
     JWT_REFRESH_SECRET: string
@@ -21,8 +22,7 @@ export interface interConfig {
 }
 
 const envProvider = (): interConfig => {
-    const configKey: string[] = ['PORT','DB_URL','NODE_ENV','JWT_ACCESS_SECRET',
-        'JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE','JWT_RESET_EXPIRE_IN','JWT_REFRESH_EXPIRE','RESET_PASS_LINK','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY']
+    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV','JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE','JWT_RESET_EXPIRE_IN','JWT_REFRESH_EXPIRE','RESET_PASS_LINK','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY']
     configKey.forEach((key) => {
         if (!process.env[key]) {
             throw new Error("key is missing in the env")
@@ -31,6 +31,7 @@ const envProvider = (): interConfig => {
     return {
     PORT: process.env.PORT as string,
     NODE_ENV: process.env.NODE_ENV as "development" | "production",
+    DATABASE_URL: process.env.DATABASE_URL as string,
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET as string,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
     JWT_SALT: process.env.JWT_SALT  as string,

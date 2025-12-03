@@ -8,7 +8,8 @@ import { fileUploader } from "src/app/shared/fileUploader";
 
 const router = express.Router();
 
-router.post("/", checkAuth(Role.USER, Role.ADMIN), fileUploader.upload.array("images", 10), validateRequest(TravelValidation.createTravelValidationSchema), TravelController.createTravel);
+router.post("/", checkAuth(Role.USER, Role.ADMIN),
+ fileUploader.upload.array("images", 10), validateRequest(TravelValidation.createTravelValidationSchema), TravelController.createTravel);
 router.get("/", TravelController.getAll);
 router.get("/:id", TravelController.getTravel);
 

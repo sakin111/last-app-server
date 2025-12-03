@@ -1,7 +1,7 @@
 import bcryptjs from "bcryptjs";
 import { envVar } from "../config/envVar";
 import { prisma } from "./prisma";
-import { Role, User} from "@prisma/client";
+import { Role, User, UserStatus} from "@prisma/client";
 import { UserCreateInput } from "prisma/schema/generate/models";
 
 
@@ -9,7 +9,7 @@ import { UserCreateInput } from "prisma/schema/generate/models";
 
 export const seedAdmin = async () => {
     try {
-        const isAdminExist = await prisma.user.findUniqueOrThrow({ 
+        const isAdminExist = await prisma.user.findUnique({ 
             where:{
                 email: envVar.ADMIN_EMAIL
             }
@@ -31,6 +31,7 @@ export const seedAdmin = async () => {
             role: Role.ADMIN,
             email: envVar.ADMIN_EMAIL,
             password: hashedPassword,
+            userStatus: UserStatus.ACTIVE
         }
 
         const admin = await prisma.user.create({

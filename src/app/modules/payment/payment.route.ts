@@ -4,12 +4,11 @@ import { checkAuth } from "src/app/middleware/checkAuth";
 import { Role } from "@prisma/client";
 import validateRequest from "src/app/middleware/validateRequest";
 import { PaymentValidation } from "./payment.validation";
-import { WebhookController } from "./webhook.controller";
+
 
 const router = express.Router();
 
 
-router.post("/webhook", express.raw({ type: "application/json" }), WebhookController.stripeWebhook);
 
 router.post("/subscribe", checkAuth(Role.USER, Role.ADMIN), validateRequest(PaymentValidation.createSubscriptionValidationSchema), PaymentController.subscribe);
 

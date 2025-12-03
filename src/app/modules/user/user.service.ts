@@ -4,18 +4,19 @@ import { QueryBuilder } from "../../shared/QueryBuilder";
 import bcrypt from "bcryptjs";
 import { userSearchableFields } from "./user.constant";
 import { JwtPayload } from "jsonwebtoken";
-import { UserStatus } from "@prisma/client";
+import { Role, UserStatus } from "@prisma/client";
+import { UserCreateInput } from "prisma/schema/generate/models";
 
-const createUser = async (payload: JwtPayload) => {
+const createUser = async (payload: UserCreateInput) => {
     const hashPassword = await bcrypt.hash(payload.password, 10);
 
     const result = await prisma.user.create({
         data: {
+            name: payload.name,
             email: payload.email,
             password: hashPassword,
-            fullName: payload.fullName,
-            name: payload.name,
-            userStatus: payload.userStatus
+            role: Role.USER,
+            userStatus: UserStatus.ACTIVE
         }
     });
 

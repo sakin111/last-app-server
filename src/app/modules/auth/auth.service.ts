@@ -10,31 +10,36 @@ import { UserStatus } from "@prisma/client";
 
 
 
-const login = async (payload: {email:string, password :string}) => {
- const user = await prisma.user.findFirstOrThrow({
-    where:{
-        email: payload.email,
-        userStatus: UserStatus.ACTIVE
+const login = async (payload: { email: string, password: string }) => {
+    const user = await prisma.user.findFirstOrThrow({
+        where: {
+            email: payload.email,
+            userStatus: UserStatus.ACTIVE
+        }
+    })
+
+    const validatePassword = await bcrypt.compare(payload.password, user.password)
+    if (!validatePassword) {
+        throw new AppError(httpStatus.BAD_REQUEST, "invalid credentials")
     }
- })
- 
- const validatePassword = await bcrypt.compare(payload.password, user.password)
- if(!validatePassword){
-    throw new AppError(httpStatus.BAD_REQUEST,"invalid credentials")
- }
 
- const userPayload = {
-    email:payload.email,
-    role:user.role
- }
+    const userPayload = {
+        email: payload.email,
+        role: user.role
+    }
 
- const accessToken = await generateToken(userPayload,envVar.JWT_ACCESS_SECRET as string, "1h")
- const refreshToken = await generateToken(userPayload,envVar.JWT_REFRESH_SECRET as string, "90d")
 
- return {
-    accessToken,
-    refreshToken,
- }
+    const accessToken = await generateToken(userPayload, envVar.JWT_ACCESS_SECRET as string, "1h")
+    const refreshToken = await generateToken(userPayload, envVar.JWT_REFRESH_SECRET as string, "90d")
+
+
+    const senderText = `Welcome back ${user.name}! You have successfully logged in.`
+
+    return {
+        accessToken,
+        refreshToken,
+        senderText
+    }
 
 }
 
@@ -59,7 +64,7 @@ const refreshToken = async (token: string) => {
         role: userData.role
     },
         envVar.JWT_ACCESS_SECRET as string,
-       envVar.JWT_ACCESS_EXPIRE as string
+        envVar.JWT_ACCESS_EXPIRE as string
     );
 
     return { accessToken }
@@ -87,7 +92,7 @@ const changePassword = async (user: any, payload: any) => {
         where: {
             email: userData.email
         },
-        data: {password: hashedPassword}
+        data: { password: hashedPassword }
     })
 
     return {
@@ -112,10 +117,8 @@ const resetPassword = async (token: string, payload: { id: string, password: str
         throw new AppError(httpStatus.FORBIDDEN, "Forbidden!")
     }
 
-    // hash password
     const password = await bcrypt.hash(payload.password, Number(envVar.JWT_SALT as string));
 
-    // update into database
     await prisma.user.update({
         where: {
             id: payload.id
@@ -128,7 +131,7 @@ const resetPassword = async (token: string, payload: { id: string, password: str
 
 const getMe = async (session: any) => {
     const accessToken = session.accessToken;
-    const decodedData = verifyTokens(accessToken,envVar.JWT_ACCESS_SECRET as string) as any;
+    const decodedData = verifyTokens(accessToken, envVar.JWT_ACCESS_SECRET as string) as any;
 
     const userData = await prisma.user.findUniqueOrThrow({
         where: {
@@ -151,9 +154,9 @@ const getMe = async (session: any) => {
 
 
 export const AuthService = {
-login,
-refreshToken,
-changePassword,
-resetPassword,
-getMe
+    login,
+    refreshToken,
+    changePassword,
+    resetPassword,
+    getMe
 }

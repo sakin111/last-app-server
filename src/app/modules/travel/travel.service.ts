@@ -6,8 +6,6 @@ const travelSearchableFields = ["title", "destination", "description"];
 
 const createTravel = async (payload: any, authorId: string, files?: Express.Multer.File[]) => {
 	let imageUrls: string[] = [];
-
-	// Upload images to Cloudinary if provided
 	if (files && files.length > 0) {
 		const filePaths = files.map(file => file.path);
 		imageUrls = await uploadMultipleToCloudinary(filePaths, "travel-buddy/travels");

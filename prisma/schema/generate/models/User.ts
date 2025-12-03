@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model User
@@ -198,7 +198,7 @@ export type UserGroupByOutputType = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName: string | null
   profileImage: string | null
   bio: string | null
   travelInterests: string[]
@@ -236,7 +236,7 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  fullName?: Prisma.StringFilter<"User"> | string
+  fullName?: Prisma.StringNullableFilter<"User"> | string | null
   profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   travelInterests?: Prisma.StringNullableListFilter<"User">
@@ -259,7 +259,7 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
+  fullName?: Prisma.SortOrderInput | Prisma.SortOrder
   profileImage?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   travelInterests?: Prisma.SortOrder
@@ -285,7 +285,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  fullName?: Prisma.StringFilter<"User"> | string
+  fullName?: Prisma.StringNullableFilter<"User"> | string | null
   profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   travelInterests?: Prisma.StringNullableListFilter<"User">
@@ -308,7 +308,7 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
+  fullName?: Prisma.SortOrderInput | Prisma.SortOrder
   profileImage?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   travelInterests?: Prisma.SortOrder
@@ -331,7 +331,7 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
-  fullName?: Prisma.StringWithAggregatesFilter<"User"> | string
+  fullName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   profileImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   travelInterests?: Prisma.StringNullableListFilter<"User">
@@ -348,7 +348,7 @@ export type UserCreateInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -371,7 +371,7 @@ export type UserUncheckedCreateInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -394,7 +394,7 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -417,7 +417,7 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -440,7 +440,7 @@ export type UserCreateManyInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -457,7 +457,7 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -474,7 +474,7 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -657,7 +657,7 @@ export type UserCreateWithoutSubscriptionInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -679,7 +679,7 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -717,7 +717,7 @@ export type UserUpdateWithoutSubscriptionInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -739,7 +739,7 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -761,7 +761,7 @@ export type UserCreateWithoutRequestInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -783,7 +783,7 @@ export type UserUncheckedCreateWithoutRequestInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -821,7 +821,7 @@ export type UserUpdateWithoutRequestInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -843,7 +843,7 @@ export type UserUncheckedUpdateWithoutRequestInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -865,7 +865,7 @@ export type UserCreateWithoutReviewsGivenInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -887,7 +887,7 @@ export type UserUncheckedCreateWithoutReviewsGivenInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -914,7 +914,7 @@ export type UserCreateWithoutReviewsReceivedInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -936,7 +936,7 @@ export type UserUncheckedCreateWithoutReviewsReceivedInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -974,7 +974,7 @@ export type UserUpdateWithoutReviewsGivenInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -996,7 +996,7 @@ export type UserUncheckedUpdateWithoutReviewsGivenInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -1029,7 +1029,7 @@ export type UserUpdateWithoutReviewsReceivedInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -1051,7 +1051,7 @@ export type UserUncheckedUpdateWithoutReviewsReceivedInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -1073,7 +1073,7 @@ export type UserCreateWithoutTravelPlansInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -1095,7 +1095,7 @@ export type UserUncheckedCreateWithoutTravelPlansInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -1133,7 +1133,7 @@ export type UserUpdateWithoutTravelPlansInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -1155,7 +1155,7 @@ export type UserUncheckedUpdateWithoutTravelPlansInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -1177,7 +1177,7 @@ export type UserCreateWithoutAdminInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -1199,7 +1199,7 @@ export type UserUncheckedCreateWithoutAdminInput = {
   name: string
   email: string
   password: string
-  fullName: string
+  fullName?: string | null
   profileImage?: string | null
   bio?: string | null
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
@@ -1237,7 +1237,7 @@ export type UserUpdateWithoutAdminInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -1259,7 +1259,7 @@ export type UserUncheckedUpdateWithoutAdminInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
@@ -1437,7 +1437,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string
     email: string
     password: string
-    fullName: string
+    fullName: string | null
     profileImage: string | null
     bio: string | null
     travelInterests: string[]
