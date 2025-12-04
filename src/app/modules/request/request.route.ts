@@ -7,8 +7,30 @@ import { RequestValidation } from "./request.validation";
 
 const router = express.Router();
 
-router.post("/", checkAuth(Role.USER, Role.ADMIN), validateRequest(RequestValidation.createRequestValidationSchema), RequestController.createRequest);
-router.get("/", checkAuth(Role.ADMIN), RequestController.getAll);
-router.get("/:id", RequestController.getRequest);
+router.post(
+  "/",
+  checkAuth(Role.USER, Role.ADMIN),
+  validateRequest(RequestValidation.createRequestValidationSchema),
+  RequestController.createRequest
+);
+
+router.get("/getAll", checkAuth(Role.ADMIN, Role.USER), RequestController.getAll);
+
+
+
+router.get("/:id", checkAuth(Role.USER, Role.ADMIN), RequestController.getRequest);
+
+router.get(
+  "/my/plans",
+  checkAuth(Role.USER, Role.ADMIN),
+  RequestController.getRequestsForMyPlans
+);
+
+router.patch(
+  "/:id/status",
+  checkAuth(Role.USER, Role.ADMIN),
+  validateRequest(RequestValidation.updateRequestStatusValidationSchema),
+  RequestController.updateRequestStatus
+);
 
 export const requestRouter = router;

@@ -8,9 +8,9 @@ import { fileUploader } from "src/app/shared/fileUploader";
 
 const router = express.Router();
 
-router.post("/", checkAuth(Role.USER, Role.ADMIN),
- fileUploader.upload.array("images", 10), validateRequest(TravelValidation.createTravelValidationSchema), TravelController.createTravel);
-router.get("/", TravelController.getAll);
+router.post("/create-travel", checkAuth(Role.USER, Role.ADMIN),
+ fileUploader, validateRequest(TravelValidation.createTravelValidationSchema), TravelController.createTravel);
+router.get("/getAll", TravelController.getAll);
 router.get("/:id", TravelController.getTravel);
 
 export const travelRouter = router;

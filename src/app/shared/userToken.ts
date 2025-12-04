@@ -10,7 +10,7 @@ import { User } from "@prisma/client";
 
 export const createUserToken = (user: Partial<User>) =>{
   const accessPayload = {
-    user: user.id,
+    id: user.id,
     email: user.email,
     role: user.role
   }
@@ -40,7 +40,7 @@ export const createNewAccessToken= async (refreshToken: string) => {
     
 
     const jwtPayload = {
-        user: isUserExist.id,
+        id: isUserExist.id,
         email: isUserExist.email,
         role: isUserExist.role
     }

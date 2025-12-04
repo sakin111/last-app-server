@@ -19,6 +19,7 @@ model User {
   reviewsReceived Review[]   @relation("ReviewTarget")
   subscription   Subscription?
   admin          Admin?
+  notifications  Notification[]
   request        Request[]
 
    @@map("users")

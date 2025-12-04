@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Notification'
 export type * from './models/Subscription'
 export type * from './models/Payment'
 export type * from './models/Request'

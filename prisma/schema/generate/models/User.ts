@@ -251,6 +251,7 @@ export type UserWhereInput = {
   reviewsReceived?: Prisma.ReviewListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   admin?: Prisma.XOR<Prisma.AdminNullableScalarRelationFilter, Prisma.AdminWhereInput> | null
+  notifications?: Prisma.NotificationListRelationFilter
   request?: Prisma.RequestListRelationFilter
 }
 
@@ -274,6 +275,7 @@ export type UserOrderByWithRelationInput = {
   reviewsReceived?: Prisma.ReviewOrderByRelationAggregateInput
   subscription?: Prisma.SubscriptionOrderByWithRelationInput
   admin?: Prisma.AdminOrderByWithRelationInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
   request?: Prisma.RequestOrderByRelationAggregateInput
 }
 
@@ -300,6 +302,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   reviewsReceived?: Prisma.ReviewListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   admin?: Prisma.XOR<Prisma.AdminNullableScalarRelationFilter, Prisma.AdminWhereInput> | null
+  notifications?: Prisma.NotificationListRelationFilter
   request?: Prisma.RequestListRelationFilter
 }, "id" | "email">
 
@@ -357,12 +360,13 @@ export type UserCreateInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   request?: Prisma.RequestCreateNestedManyWithoutUserInput
 }
 
@@ -380,12 +384,13 @@ export type UserUncheckedCreateInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanUncheckedCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewUncheckedCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   request?: Prisma.RequestUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -409,6 +414,7 @@ export type UserUpdateInput = {
   reviewsReceived?: Prisma.ReviewUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUpdateManyWithoutUserNestedInput
 }
 
@@ -432,6 +438,7 @@ export type UserUncheckedUpdateInput = {
   reviewsReceived?: Prisma.ReviewUncheckedUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -449,7 +456,7 @@ export type UserCreateManyInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
 }
 
 export type UserUpdateManyMutationInput = {
@@ -536,6 +543,20 @@ export type UserMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userStatus?: Prisma.SortOrder
+}
+
+export type UserCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
 }
 
 export type UserCreateNestedOneWithoutSubscriptionInput = {
@@ -652,6 +673,114 @@ export type UserUpdateOneRequiredWithoutAdminNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAdminInput, Prisma.UserUpdateWithoutAdminInput>, Prisma.UserUncheckedUpdateWithoutAdminInput>
 }
 
+export type UserCreateWithoutNotificationsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  fullName?: string | null
+  profileImage?: string | null
+  bio?: string | null
+  travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
+  visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
+  currentLocation?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userStatus?: $Enums.UserStatus
+  travelPlans?: Prisma.TravelPlanCreateNestedManyWithoutAuthorInput
+  reviewsGiven?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
+  reviewsReceived?: Prisma.ReviewCreateNestedManyWithoutTargetInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  admin?: Prisma.AdminCreateNestedOneWithoutUserInput
+  request?: Prisma.RequestCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  fullName?: string | null
+  profileImage?: string | null
+  bio?: string | null
+  travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
+  visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
+  currentLocation?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userStatus?: $Enums.UserStatus
+  travelPlans?: Prisma.TravelPlanUncheckedCreateNestedManyWithoutAuthorInput
+  reviewsGiven?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
+  reviewsReceived?: Prisma.ReviewUncheckedCreateNestedManyWithoutTargetInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
+  request?: Prisma.RequestUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
+  visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
+  currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userStatus?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  travelPlans?: Prisma.TravelPlanUpdateManyWithoutAuthorNestedInput
+  reviewsGiven?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
+  reviewsReceived?: Prisma.ReviewUpdateManyWithoutTargetNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
+  request?: Prisma.RequestUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
+  visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
+  currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userStatus?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  travelPlans?: Prisma.TravelPlanUncheckedUpdateManyWithoutAuthorNestedInput
+  reviewsGiven?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
+  reviewsReceived?: Prisma.ReviewUncheckedUpdateManyWithoutTargetNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
+  request?: Prisma.RequestUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutSubscriptionInput = {
   id?: string
   name: string
@@ -666,11 +795,12 @@ export type UserCreateWithoutSubscriptionInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewCreateNestedManyWithoutTargetInput
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   request?: Prisma.RequestCreateNestedManyWithoutUserInput
 }
 
@@ -688,11 +818,12 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanUncheckedCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewUncheckedCreateNestedManyWithoutTargetInput
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   request?: Prisma.RequestUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -731,6 +862,7 @@ export type UserUpdateWithoutSubscriptionInput = {
   reviewsGiven?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   reviewsReceived?: Prisma.ReviewUpdateManyWithoutTargetNestedInput
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUpdateManyWithoutUserNestedInput
 }
 
@@ -753,6 +885,7 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   reviewsGiven?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   reviewsReceived?: Prisma.ReviewUncheckedUpdateManyWithoutTargetNestedInput
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -770,12 +903,13 @@ export type UserCreateWithoutRequestInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRequestInput = {
@@ -792,12 +926,13 @@ export type UserUncheckedCreateWithoutRequestInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanUncheckedCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewUncheckedCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRequestInput = {
@@ -836,6 +971,7 @@ export type UserUpdateWithoutRequestInput = {
   reviewsReceived?: Prisma.ReviewUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRequestInput = {
@@ -858,6 +994,7 @@ export type UserUncheckedUpdateWithoutRequestInput = {
   reviewsReceived?: Prisma.ReviewUncheckedUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReviewsGivenInput = {
@@ -874,11 +1011,12 @@ export type UserCreateWithoutReviewsGivenInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   request?: Prisma.RequestCreateNestedManyWithoutUserInput
 }
 
@@ -896,11 +1034,12 @@ export type UserUncheckedCreateWithoutReviewsGivenInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanUncheckedCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewUncheckedCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   request?: Prisma.RequestUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -923,11 +1062,12 @@ export type UserCreateWithoutReviewsReceivedInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   request?: Prisma.RequestCreateNestedManyWithoutUserInput
 }
 
@@ -945,11 +1085,12 @@ export type UserUncheckedCreateWithoutReviewsReceivedInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanUncheckedCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   request?: Prisma.RequestUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -988,6 +1129,7 @@ export type UserUpdateWithoutReviewsGivenInput = {
   reviewsReceived?: Prisma.ReviewUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUpdateManyWithoutUserNestedInput
 }
 
@@ -1010,6 +1152,7 @@ export type UserUncheckedUpdateWithoutReviewsGivenInput = {
   reviewsReceived?: Prisma.ReviewUncheckedUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1043,6 +1186,7 @@ export type UserUpdateWithoutReviewsReceivedInput = {
   reviewsGiven?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUpdateManyWithoutUserNestedInput
 }
 
@@ -1065,6 +1209,7 @@ export type UserUncheckedUpdateWithoutReviewsReceivedInput = {
   reviewsGiven?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1082,11 +1227,12 @@ export type UserCreateWithoutTravelPlansInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   reviewsGiven?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   request?: Prisma.RequestCreateNestedManyWithoutUserInput
 }
 
@@ -1104,11 +1250,12 @@ export type UserUncheckedCreateWithoutTravelPlansInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   reviewsGiven?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewUncheckedCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   request?: Prisma.RequestUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1147,6 +1294,7 @@ export type UserUpdateWithoutTravelPlansInput = {
   reviewsReceived?: Prisma.ReviewUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUpdateManyWithoutUserNestedInput
 }
 
@@ -1169,6 +1317,7 @@ export type UserUncheckedUpdateWithoutTravelPlansInput = {
   reviewsReceived?: Prisma.ReviewUncheckedUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1186,11 +1335,12 @@ export type UserCreateWithoutAdminInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   request?: Prisma.RequestCreateNestedManyWithoutUserInput
 }
 
@@ -1208,11 +1358,12 @@ export type UserUncheckedCreateWithoutAdminInput = {
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  userStatus: $Enums.UserStatus
+  userStatus?: $Enums.UserStatus
   travelPlans?: Prisma.TravelPlanUncheckedCreateNestedManyWithoutAuthorInput
   reviewsGiven?: Prisma.ReviewUncheckedCreateNestedManyWithoutAuthorInput
   reviewsReceived?: Prisma.ReviewUncheckedCreateNestedManyWithoutTargetInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   request?: Prisma.RequestUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1251,6 +1402,7 @@ export type UserUpdateWithoutAdminInput = {
   reviewsGiven?: Prisma.ReviewUpdateManyWithoutAuthorNestedInput
   reviewsReceived?: Prisma.ReviewUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUpdateManyWithoutUserNestedInput
 }
 
@@ -1273,6 +1425,7 @@ export type UserUncheckedUpdateWithoutAdminInput = {
   reviewsGiven?: Prisma.ReviewUncheckedUpdateManyWithoutAuthorNestedInput
   reviewsReceived?: Prisma.ReviewUncheckedUpdateManyWithoutTargetNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   request?: Prisma.RequestUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1285,6 +1438,7 @@ export type UserCountOutputType = {
   travelPlans: number
   reviewsGiven: number
   reviewsReceived: number
+  notifications: number
   request: number
 }
 
@@ -1292,6 +1446,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   travelPlans?: boolean | UserCountOutputTypeCountTravelPlansArgs
   reviewsGiven?: boolean | UserCountOutputTypeCountReviewsGivenArgs
   reviewsReceived?: boolean | UserCountOutputTypeCountReviewsReceivedArgs
+  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   request?: boolean | UserCountOutputTypeCountRequestArgs
 }
 
@@ -1329,6 +1484,13 @@ export type UserCountOutputTypeCountReviewsReceivedArgs<ExtArgs extends runtime.
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountRequestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.RequestWhereInput
 }
@@ -1354,6 +1516,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   reviewsReceived?: boolean | Prisma.User$reviewsReceivedArgs<ExtArgs>
   subscription?: boolean | Prisma.User$subscriptionArgs<ExtArgs>
   admin?: boolean | Prisma.User$adminArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   request?: boolean | Prisma.User$requestArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1416,6 +1579,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   reviewsReceived?: boolean | Prisma.User$reviewsReceivedArgs<ExtArgs>
   subscription?: boolean | Prisma.User$subscriptionArgs<ExtArgs>
   admin?: boolean | Prisma.User$adminArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   request?: boolean | Prisma.User$requestArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1430,6 +1594,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     reviewsReceived: Prisma.$ReviewPayload<ExtArgs>[]
     subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
     admin: Prisma.$AdminPayload<ExtArgs> | null
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
     request: Prisma.$RequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1846,6 +2011,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   reviewsReceived<T extends Prisma.User$reviewsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscription<T extends Prisma.User$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   admin<T extends Prisma.User$adminArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adminArgs<ExtArgs>>): Prisma.Prisma__AdminClient<runtime.Types.Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   request<T extends Prisma.User$requestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2385,6 +2551,30 @@ export type User$adminArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   include?: Prisma.AdminInclude<ExtArgs> | null
   where?: Prisma.AdminWhereInput
+}
+
+/**
+ * User.notifications
+ */
+export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

@@ -16,7 +16,7 @@ export const seedAdmin = async () => {
          })
 
         if (isAdminExist) {
-            console.log("Super Admin Already Exists!");
+            console.log("Admin Already Exists!");
             return;
         }
 
@@ -37,7 +37,7 @@ export const seedAdmin = async () => {
         const admin = await prisma.user.create({
             data: payload as UserCreateInput
         })
-        console.log("Super Admin Created Successfully \n");
+        console.log("Admin Created Successfully \n");
         console.log(admin);
     } catch (error) {
         console.log(error);

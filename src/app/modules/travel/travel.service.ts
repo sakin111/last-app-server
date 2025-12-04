@@ -4,30 +4,40 @@ import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
 
 const travelSearchableFields = ["title", "destination", "description"];
 
-const createTravel = async (payload: any, authorId: string, files?: Express.Multer.File[]) => {
-	let imageUrls: string[] = [];
-	if (files && files.length > 0) {
-		const filePaths = files.map(file => file.path);
-		imageUrls = await uploadMultipleToCloudinary(filePaths, "travel-buddy/travels");
-	}
+const createTravel = async (
+  payload: any,
+  authorId: string,
+  files?: Express.Multer.File[]
+) => {
+  if (!authorId) {
+    throw new Error("authorId is required");
+  }
 
-	const result = await prisma.travelPlan.create({
-		data: {
-			title: payload.title,
-			destination: payload.destination,
-			startDate: new Date(payload.startDate),
-			endDate: new Date(payload.endDate),
-			budgetRange: payload.budgetRange,
-			travelType: payload.travelType,
-			description: payload.description,
-			visibility: payload.visibility ?? true,
-			images: imageUrls ?? [],
-			author: { connect: { id: authorId } }
-		}
-	});
+  const filePaths = files?.map(f => f.path) || [];
+  const imageUrls = filePaths.length
+    ? await uploadMultipleToCloudinary(filePaths)
+    : [];
 
-	return result;
+  const result = await prisma.travelPlan.create({
+    data: {
+      title: payload.title,
+      destination: payload.destination,
+      startDate: new Date(payload.startDate),
+      endDate: new Date(payload.endDate),
+      budgetRange: payload.budgetRange,
+      travelType: payload.travelType.toUpperCase(),
+      description: payload.description,
+      visibility: payload.visibility ?? true,
+      images: imageUrls,
+      author: {
+        connect: { id: authorId },
+      },
+    },
+  });
+
+  return result;
 };
+
 
 const getTravelById = async (id: string) => {
 	const travel = await prisma.travelPlan.findUniqueOrThrow({

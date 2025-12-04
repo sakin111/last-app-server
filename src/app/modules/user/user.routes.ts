@@ -20,6 +20,12 @@ router.get(
      UserController.getMyProfile
 ),
 
+router.get(
+    "/notifications",
+     checkAuth(Role.USER),
+     UserController.getMyNotifications
+),
+
 
 router.get(
     "/allUser",checkAuth(Role.ADMIN), UserController.AllUser

@@ -4,13 +4,14 @@ import catchAsync from "../../shared/catchAsync";
 
 import httpStatus from 'http-status'
 import { sendResponse } from "src/app/shared/sendResponse";
+import { prisma } from "src/app/shared/prisma";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
     const result = await UserService.createUser(req.body)
     sendResponse(res,{
        statusCode: 201,
        success:true,
-       message:"Patient created successfully",
+       message:"User created successfully",
        data: result
     })
 }
@@ -23,7 +24,7 @@ const AllUser = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res,{
        statusCode: 200,
        success:true,
-       message:"Patient retrieve successfully",
+       message:"User retrieve successfully",
        meta: result.meta,
        data: result.data
     })
@@ -37,7 +38,7 @@ const getMyProfile = catchAsync(async (req: Request  , res: Response) => {
     sendResponse(res,{
        statusCode: 200,
        success:true,
-       message:"Patient retrieve successfully",
+       message:"User retrieve successfully",
        data: result
     })
 }
@@ -58,9 +59,30 @@ const changeProfileStatus = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+const getMyNotifications = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  if (!userId) throw new Error("Unauthorized");
+
+  const notifications = await prisma.notification.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" }
+  });
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Notifications retrieved",
+    data: notifications
+  });
+});
+
+
+
+
 export const UserController = {
  createUser,
  AllUser,
  getMyProfile,
- changeProfileStatus
+ changeProfileStatus,
+ getMyNotifications
 }
