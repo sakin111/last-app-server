@@ -30,6 +30,7 @@ const AllUser = catchAsync(async (req: Request, res: Response) => {
     })
 }
 )
+
 const getMyProfile = catchAsync(async (req: Request  , res: Response) => {
 
     const user = req.user;

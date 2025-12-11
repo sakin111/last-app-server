@@ -7,8 +7,8 @@ import { ReviewValidation } from "./review.validation";
 
 const router = express.Router();
 
-router.post("/", checkAuth(Role.USER, Role.ADMIN), validateRequest(ReviewValidation.createReviewValidationSchema), ReviewController.createReview);
-router.get("/", ReviewController.getAll);
+router.post("/postReview", checkAuth(Role.USER, Role.ADMIN), validateRequest(ReviewValidation.createReviewValidationSchema), ReviewController.createReview);
+router.get("/getAll", ReviewController.getAll);
 router.get("/:id", ReviewController.getReview);
 
 export const reviewRouter = router;

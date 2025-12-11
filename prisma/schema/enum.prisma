@@ -11,7 +11,7 @@ enum UserStatus {
 
 enum TravelType {
   SOLO
-  FAMILY
+  GROUP
   FRIENDS
 }
 

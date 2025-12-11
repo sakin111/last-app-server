@@ -6,10 +6,10 @@ export const TravelValidation = {
             destination: z.string().min(2, "Destination must be at least 2 characters"),
             startDate: z.iso.datetime("Invalid start date format"),
             endDate: z.iso.datetime("Invalid end date format"),
-            budgetRange: z.string().optional(),
+            budgetRange: z.string(),
             travelType: z.string(),
             description: z.string().optional(),
-            visibility: z.boolean().optional().default(true)
+            visibility: z.coerce.boolean().optional().default(true)
  
     })
 };

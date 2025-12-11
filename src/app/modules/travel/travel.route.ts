@@ -11,6 +11,7 @@ const router = express.Router();
 router.post("/create-travel", checkAuth(Role.USER, Role.ADMIN),
  fileUploader, validateRequest(TravelValidation.createTravelValidationSchema), TravelController.createTravel);
 router.get("/getAll", TravelController.getAll);
+router.get("/getTravel", TravelController.Travel);
 router.get("/:id", TravelController.getTravel);
 
 export const travelRouter = router;

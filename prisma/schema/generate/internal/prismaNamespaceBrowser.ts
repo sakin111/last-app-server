@@ -167,6 +167,7 @@ export const UserScalarFieldEnum = {
   travelInterests: 'travelInterests',
   visitedCountries: 'visitedCountries',
   currentLocation: 'currentLocation',
+  isActive: 'isActive',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',

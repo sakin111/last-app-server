@@ -28,7 +28,7 @@ export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 export const TravelType = {
   SOLO: 'SOLO',
-  FAMILY: 'FAMILY',
+  GROUP: 'GROUP',
   FRIENDS: 'FRIENDS'
 } as const
 

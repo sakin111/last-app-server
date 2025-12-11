@@ -29,4 +29,4 @@ export const fileUploader = multer({
   storage,
   fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 },
-}).array("file", 10);
+}).array("images", 10);

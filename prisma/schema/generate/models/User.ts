@@ -33,6 +33,7 @@ export type UserMinAggregateOutputType = {
   profileImage: string | null
   bio: string | null
   currentLocation: string | null
+  isActive: boolean | null
   role: $Enums.Role | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -48,6 +49,7 @@ export type UserMaxAggregateOutputType = {
   profileImage: string | null
   bio: string | null
   currentLocation: string | null
+  isActive: boolean | null
   role: $Enums.Role | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +67,7 @@ export type UserCountAggregateOutputType = {
   travelInterests: number
   visitedCountries: number
   currentLocation: number
+  isActive: number
   role: number
   createdAt: number
   updatedAt: number
@@ -82,6 +85,7 @@ export type UserMinAggregateInputType = {
   profileImage?: true
   bio?: true
   currentLocation?: true
+  isActive?: true
   role?: true
   createdAt?: true
   updatedAt?: true
@@ -97,6 +101,7 @@ export type UserMaxAggregateInputType = {
   profileImage?: true
   bio?: true
   currentLocation?: true
+  isActive?: true
   role?: true
   createdAt?: true
   updatedAt?: true
@@ -114,6 +119,7 @@ export type UserCountAggregateInputType = {
   travelInterests?: true
   visitedCountries?: true
   currentLocation?: true
+  isActive?: true
   role?: true
   createdAt?: true
   updatedAt?: true
@@ -204,6 +210,7 @@ export type UserGroupByOutputType = {
   travelInterests: string[]
   visitedCountries: string[]
   currentLocation: string | null
+  isActive: boolean
   role: $Enums.Role
   createdAt: Date
   updatedAt: Date
@@ -242,6 +249,7 @@ export type UserWhereInput = {
   travelInterests?: Prisma.StringNullableListFilter<"User">
   visitedCountries?: Prisma.StringNullableListFilter<"User">
   currentLocation?: Prisma.StringNullableFilter<"User"> | string | null
+  isActive?: Prisma.BoolFilter<"User"> | boolean
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -266,6 +274,7 @@ export type UserOrderByWithRelationInput = {
   travelInterests?: Prisma.SortOrder
   visitedCountries?: Prisma.SortOrder
   currentLocation?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -293,6 +302,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   travelInterests?: Prisma.StringNullableListFilter<"User">
   visitedCountries?: Prisma.StringNullableListFilter<"User">
   currentLocation?: Prisma.StringNullableFilter<"User"> | string | null
+  isActive?: Prisma.BoolFilter<"User"> | boolean
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -317,6 +327,7 @@ export type UserOrderByWithAggregationInput = {
   travelInterests?: Prisma.SortOrder
   visitedCountries?: Prisma.SortOrder
   currentLocation?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -340,6 +351,7 @@ export type UserScalarWhereWithAggregatesInput = {
   travelInterests?: Prisma.StringNullableListFilter<"User">
   visitedCountries?: Prisma.StringNullableListFilter<"User">
   currentLocation?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -357,6 +369,7 @@ export type UserCreateInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -381,6 +394,7 @@ export type UserUncheckedCreateInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -405,6 +419,7 @@ export type UserUpdateInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -429,6 +444,7 @@ export type UserUncheckedUpdateInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -453,6 +469,7 @@ export type UserCreateManyInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -470,6 +487,7 @@ export type UserUpdateManyMutationInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -487,6 +505,7 @@ export type UserUncheckedUpdateManyInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -509,6 +528,7 @@ export type UserCountOrderByAggregateInput = {
   travelInterests?: Prisma.SortOrder
   visitedCountries?: Prisma.SortOrder
   currentLocation?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -524,6 +544,7 @@ export type UserMaxOrderByAggregateInput = {
   profileImage?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   currentLocation?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -539,6 +560,7 @@ export type UserMinOrderByAggregateInput = {
   profileImage?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   currentLocation?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -684,6 +706,7 @@ export type UserCreateWithoutNotificationsInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -707,6 +730,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -746,6 +770,7 @@ export type UserUpdateWithoutNotificationsInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -769,6 +794,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -792,6 +818,7 @@ export type UserCreateWithoutSubscriptionInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -815,6 +842,7 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -854,6 +882,7 @@ export type UserUpdateWithoutSubscriptionInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -877,6 +906,7 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -900,6 +930,7 @@ export type UserCreateWithoutRequestInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -923,6 +954,7 @@ export type UserUncheckedCreateWithoutRequestInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -962,6 +994,7 @@ export type UserUpdateWithoutRequestInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -985,6 +1018,7 @@ export type UserUncheckedUpdateWithoutRequestInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1008,6 +1042,7 @@ export type UserCreateWithoutReviewsGivenInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1031,6 +1066,7 @@ export type UserUncheckedCreateWithoutReviewsGivenInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1059,6 +1095,7 @@ export type UserCreateWithoutReviewsReceivedInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1082,6 +1119,7 @@ export type UserUncheckedCreateWithoutReviewsReceivedInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1121,6 +1159,7 @@ export type UserUpdateWithoutReviewsGivenInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1144,6 +1183,7 @@ export type UserUncheckedUpdateWithoutReviewsGivenInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1178,6 +1218,7 @@ export type UserUpdateWithoutReviewsReceivedInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1201,6 +1242,7 @@ export type UserUncheckedUpdateWithoutReviewsReceivedInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1224,6 +1266,7 @@ export type UserCreateWithoutTravelPlansInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1247,6 +1290,7 @@ export type UserUncheckedCreateWithoutTravelPlansInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1286,6 +1330,7 @@ export type UserUpdateWithoutTravelPlansInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1309,6 +1354,7 @@ export type UserUncheckedUpdateWithoutTravelPlansInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1332,6 +1378,7 @@ export type UserCreateWithoutAdminInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1355,6 +1402,7 @@ export type UserUncheckedCreateWithoutAdminInput = {
   travelInterests?: Prisma.UserCreatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserCreatevisitedCountriesInput | string[]
   currentLocation?: string | null
+  isActive?: boolean
   role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1394,6 +1442,7 @@ export type UserUpdateWithoutAdminInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1417,6 +1466,7 @@ export type UserUncheckedUpdateWithoutAdminInput = {
   travelInterests?: Prisma.UserUpdatetravelInterestsInput | string[]
   visitedCountries?: Prisma.UserUpdatevisitedCountriesInput | string[]
   currentLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1507,6 +1557,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   travelInterests?: boolean
   visitedCountries?: boolean
   currentLocation?: boolean
+  isActive?: boolean
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1532,6 +1583,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   travelInterests?: boolean
   visitedCountries?: boolean
   currentLocation?: boolean
+  isActive?: boolean
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1549,6 +1601,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   travelInterests?: boolean
   visitedCountries?: boolean
   currentLocation?: boolean
+  isActive?: boolean
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1566,13 +1619,14 @@ export type UserSelectScalar = {
   travelInterests?: boolean
   visitedCountries?: boolean
   currentLocation?: boolean
+  isActive?: boolean
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   userStatus?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "fullName" | "profileImage" | "bio" | "travelInterests" | "visitedCountries" | "currentLocation" | "role" | "createdAt" | "updatedAt" | "userStatus", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "fullName" | "profileImage" | "bio" | "travelInterests" | "visitedCountries" | "currentLocation" | "isActive" | "role" | "createdAt" | "updatedAt" | "userStatus", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   travelPlans?: boolean | Prisma.User$travelPlansArgs<ExtArgs>
   reviewsGiven?: boolean | Prisma.User$reviewsGivenArgs<ExtArgs>
@@ -1608,6 +1662,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     travelInterests: string[]
     visitedCountries: string[]
     currentLocation: string | null
+    isActive: boolean
     role: $Enums.Role
     createdAt: Date
     updatedAt: Date
@@ -2052,6 +2107,7 @@ export interface UserFieldRefs {
   readonly travelInterests: Prisma.FieldRef<"User", 'String[]'>
   readonly visitedCountries: Prisma.FieldRef<"User", 'String[]'>
   readonly currentLocation: Prisma.FieldRef<"User", 'String'>
+  readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
