@@ -5,7 +5,8 @@ import { envVar } from './app/config/envVar'
 import { seedAdmin } from './app/shared/seedAdmin'
 
 import { app } from './app'
-import { prisma } from './app/shared/prisma'
+import prisma from './app/shared/prisma'
+
 
 
 
