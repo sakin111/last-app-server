@@ -128,7 +128,7 @@ export type RequestScalarFieldEnum = (typeof RequestScalarFieldEnum)[keyof typeo
 export const ReviewScalarFieldEnum = {
   id: 'id',
   rating: 'rating',
-  comment: 'comment',
+  content: 'content',
   createdAt: 'createdAt',
   authorId: 'authorId',
   targetId: 'targetId'

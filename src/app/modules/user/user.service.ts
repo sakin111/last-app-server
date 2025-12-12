@@ -6,6 +6,7 @@ import { userSearchableFields } from "./user.constant";
 import { JwtPayload } from "jsonwebtoken";
 import { Role, UserStatus } from "@prisma/client";
 import { UserCreateInput } from "prisma/schema/generate/models";
+import { uploadMultipleToCloudinary } from "src/app/shared/cloudinary";
 
 const createUser = async (payload: UserCreateInput) => {
     const hashPassword = await bcrypt.hash(payload.password, 10);
@@ -24,13 +25,14 @@ const createUser = async (payload: UserCreateInput) => {
 };
 
 const getMyProfile = async (user: JwtPayload) => {
-    const userInfo = await prisma.user.findUniqueOrThrow({
+    const userInfo = await prisma.user.findUnique({
         where: {
             email: user.email
         },
         select: {
             id: true,
             email: true,
+            name: true,
             role: true,
             userStatus: true,
             fullName: true,
@@ -84,9 +86,49 @@ const changeProfileStatus = async (
 };
 
 
+const updatedUser = async (
+    id: string,
+    payload: { name?: string; email?:string, bio?:string ,fullName?:string, currentLocation?:string }
+) => {
+
+    await prisma.user.findUniqueOrThrow({
+        where: { id },
+    });
+
+    const updatedUser = await prisma.user.update({
+        where: { id },
+        data: payload
+    });
+
+    return updatedUser;
+};
+const updateProfileImage = async (
+    id: string,
+    files?: Express.Multer.File[]
+) => {
+
+      const filePaths = files?.map(f => f.path) || [];
+      const imageUrls = filePaths.length
+        ? await uploadMultipleToCloudinary(filePaths)
+        : [];
+    await prisma.user.findUniqueOrThrow({
+        where: { id },
+    });
+
+    const updatedUser = await prisma.user.update({
+        where: { id },
+        data: { profileImage: imageUrls[0] || null }
+    });
+
+    return updatedUser;
+};
+
+
 export const UserService = {
     createUser,
     getAllFromDB,
     getMyProfile,
-    changeProfileStatus
+    changeProfileStatus,
+    updatedUser,
+    updateProfileImage
 };

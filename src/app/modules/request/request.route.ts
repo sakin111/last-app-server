@@ -8,7 +8,7 @@ import { RequestValidation } from "./request.validation";
 const router = express.Router();
 
 router.post(
-  "/",
+  "/createRequest",
   checkAuth(Role.USER, Role.ADMIN),
   validateRequest(RequestValidation.createRequestValidationSchema),
   RequestController.createRequest

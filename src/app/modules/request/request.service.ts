@@ -8,7 +8,7 @@ const createRequest = async (payload: { travelPlanId: string }, userId: string) 
 
   const existing = await prisma.request.findFirst({
     where: {
-      userId,
+      userId: userId,
       travelPlanId: payload.travelPlanId
     }
   });
@@ -17,16 +17,15 @@ const createRequest = async (payload: { travelPlanId: string }, userId: string) 
     throw new Error("You have already requested to join this travel plan.");
   }
 
-  const result = await prisma.request.create({
+  return prisma.request.create({
     data: {
-      user: { connect: { id: userId } },
-      travelPlan: { connect: { id: payload.travelPlanId } },
+      userId,
+      travelPlanId: payload.travelPlanId,
       status: RequestStatus.PENDING
     }
   });
-
-  return result;
 };
+
 
 const getRequestById = async (id: string) => {
   const reqData = await prisma.request.findUniqueOrThrow({

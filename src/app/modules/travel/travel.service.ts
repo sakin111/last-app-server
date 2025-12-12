@@ -69,6 +69,20 @@ const Travel = async () => {
    return result
 };
 
+export const myTravel = async (userId: string) => {
+  const travels = await prisma.travelPlan.findMany({
+    where: {
+      authorId: userId, 
+    },
+    orderBy: {
+      createdAt: "desc"
+    },
+  });
+
+  return travels;
+};
+
+
 const updateTravel = async (id: string, userId: string, updateData: any) => {
 
   const existingTravel = await prisma.travelPlan.findUnique({
@@ -83,7 +97,7 @@ const updateTravel = async (id: string, userId: string, updateData: any) => {
     throw new AppError(403, 'You are not authorized to update this travel plan');
   }
 
-  // Convert string to boolean for visibility
+
   if (typeof updateData.visibility === 'string') {
     updateData.visibility = updateData.visibility === 'true';
   }
@@ -155,6 +169,7 @@ export const TravelService = {
 	getAllTravels,
   updateTravel,
   deleteTravel,
-  Travel
+  Travel,
+  myTravel
 };
 

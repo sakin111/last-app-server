@@ -7,9 +7,10 @@ import { Role } from "@prisma/client";
 
 
 
+
 const router = express.Router();
 
-router.get("/getMe",AuthController.getMe)
+router.get("/getMe", checkAuth(Role.USER), AuthController.getMe)
 
 router.post(
     "/login",
@@ -31,10 +32,6 @@ router.post(
 
 
 
-router.post(
-    '/reset-password',
-    AuthController.resetPassword
-)
 
 
 

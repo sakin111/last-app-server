@@ -6,6 +6,7 @@ import { envVar } from "../../config/envVar";
 import AppError from "../../error/AppError";
 import { prisma } from "../../shared/prisma";
 import { UserStatus } from "@prisma/client";
+import { JwtPayload } from "jsonwebtoken";
 
 
 
@@ -103,50 +104,24 @@ const changePassword = async (user: any, payload: any) => {
 
 
 
-const resetPassword = async (token: string, payload: { id: string, password: string }) => {
+
+
+const getMe = async (session: JwtPayload) => {
 
     const userData = await prisma.user.findUniqueOrThrow({
         where: {
-            id: payload.id,
-            userStatus: "ACTIVE"
-        }
-    });
-
-    const isValidToken = verifyTokens(token, envVar.JWT_ACCESS_SECRET as string)
-
-    if (!isValidToken) {
-        throw new AppError(httpStatus.FORBIDDEN, "Forbidden!")
-    }
-
-    const password = await bcrypt.hash(payload.password, Number(envVar.JWT_SALT as string));
-
-    await prisma.user.update({
-        where: {
-            id: payload.id
-        },
-        data: {
-            password
-        }
-    })
-};
-
-const getMe = async (session: any) => {
-    const accessToken = session.accessToken;
-    const decodedData = verifyTokens(accessToken, envVar.JWT_ACCESS_SECRET as string) as any;
-
-    const userData = await prisma.user.findUniqueOrThrow({
-        where: {
-            email: decodedData.email,
+            email: session.email,
             userStatus: "ACTIVE"
         }
     })
 
-    const { id, email, role, userStatus } = userData;
+    const { id, email, role, name, userStatus } = userData;
 
     return {
         id,
         email,
         role,
+        name,
         userStatus
     }
 
@@ -158,6 +133,5 @@ export const AuthService = {
     login,
     refreshToken,
     changePassword,
-    resetPassword,
     getMe
 }

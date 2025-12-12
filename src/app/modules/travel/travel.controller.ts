@@ -87,13 +87,29 @@ const Travel = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const myTravel = catchAsync(async (req: Request, res: Response) => {
+
+  const result = await TravelService.myTravel(req.user?.id as string)
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Travel retrieved successfully',
+    data: result
+  });
+});
+
+
+
 export const TravelController = {
 	createTravel,
 	getTravel,
 	getAll,
 	updateTravel,
 	deleteTravel,
-	Travel
+	Travel,
+	myTravel
 
 };
 

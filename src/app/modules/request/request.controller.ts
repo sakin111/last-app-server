@@ -9,7 +9,7 @@ const createRequest = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   if (!user) throw new Error("Unauthorized");
 
-  const result = await RequestService.createRequest(req.body, user.id);
+  const result = await RequestService.createRequest(req.body, user?.id);
 
   sendResponse(res, {
     statusCode: 201,

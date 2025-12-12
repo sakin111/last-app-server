@@ -3,42 +3,66 @@ import catchAsync from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { ReviewService } from "./review.service";
 
-const createReview = catchAsync(async (req: Request & { user?: any }, res: Response) => {
-  const user = req.user;
-  const result = await ReviewService.createReview(req.body, user.id);
+const addReview = catchAsync(async (req: Request, res: Response) => {
+  const authorId = req.user.id;
+  const {targetId} = req.params
+  const payload = req.body;
 
+  if (!payload.rating || !payload.content) {
+    return res.status(400).json({
+      success: false,
+      message: "Rating & content are required",
+    });
+  }
+
+  const review = await ReviewService.addReview(targetId, authorId, payload);
 
   sendResponse(res, {
     statusCode: 201,
     success: true,
-    message: "Review created",
-    data: result
+    message: "Review added successfully",
+    data: review,
   });
 });
 
-const getReview = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await ReviewService.getReviewById(id);
+const getReviewsByTravelId = catchAsync(async (req: Request, res: Response) => {
+  const travelId = req.params.travelId;
+  const reviews = await ReviewService.getReviewsByTravelId(travelId);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Review retrieved",
-    data: result
+    message: "Reviews fetched successfully",
+    data: reviews,
   });
 });
 
-const getAll = catchAsync(async (req: Request, res: Response) => {
-  const query = req.query as Record<string, string>;
-  const result = await ReviewService.getAllReviews(query);
+const getReviewById = catchAsync(async (req: Request, res: Response) => {
+  const reviewId = req.params.reviewId;
+  const review = await ReviewService.getReviewById(reviewId);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Reviews retrieved",
-    meta: result.meta,
-    data: result.data
+    message: "Review fetched successfully",
+    data: review,
   });
 });
 
-export const ReviewController = { createReview, getReview, getAll };
+const getAllReviews = catchAsync(async (_req: Request, res: Response) => {
+  const reviews = await ReviewService.getAllReviews();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "All reviews fetched",
+    data: reviews,
+  });
+});
+
+export const ReviewController = {
+  addReview,
+  getReviewsByTravelId,
+  getReviewById,
+  getAllReviews,
+};

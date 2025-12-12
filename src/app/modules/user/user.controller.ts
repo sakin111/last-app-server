@@ -76,6 +76,30 @@ const getMyNotifications = catchAsync(async (req: Request, res: Response) => {
     data: notifications
   });
 });
+const updatedUser = catchAsync(async (req: Request, res: Response) => {
+
+  const id = req.user?.id;
+  const payload = req.body;
+
+  const result = await UserService.updatedUser(id as string, payload);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Notifications retrieved",
+    data: result
+  });
+});
+const updateProfileImage = catchAsync(async (req: Request, res: Response) => {
+
+  const id = req.user?.id;
+  const result = await UserService.updateProfileImage(id as string, req.files as Express.Multer.File[]);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Notifications retrieved",
+    data: result
+  });
+});
 
 
 
@@ -85,5 +109,7 @@ export const UserController = {
  AllUser,
  getMyProfile,
  changeProfileStatus,
- getMyNotifications
+ getMyNotifications,
+ updatedUser,
+ updateProfileImage
 }

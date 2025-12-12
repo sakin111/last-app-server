@@ -12,6 +12,9 @@ router.post("/create-travel", checkAuth(Role.USER, Role.ADMIN),
  fileUploader, validateRequest(TravelValidation.createTravelValidationSchema), TravelController.createTravel);
 router.get("/getAll", TravelController.getAll);
 router.get("/getTravel", TravelController.Travel);
+router.get("/myTravel",checkAuth(Role.USER), TravelController.myTravel);
 router.get("/:id", TravelController.getTravel);
+router.patch("/:id",checkAuth(Role.USER, Role.ADMIN), TravelController.updateTravel);
+router.get("/:id",checkAuth(Role.USER, Role.ADMIN), TravelController.deleteTravel);
 
 export const travelRouter = router;
