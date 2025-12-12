@@ -58,7 +58,7 @@ const createCheckoutSessionForSubscription = async (payload: any, userId: string
 
 const createPaymentIntent = async (payload: any, userId: string) => {
 
-  const result = await prisma.$transaction(async(tnx) => {
+  const result = await prisma.$transaction(async(tnx: any) => {
         await tnx.user.findUniqueOrThrow({
         where: { id: userId }
     });

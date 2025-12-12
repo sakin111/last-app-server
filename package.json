@@ -5,13 +5,13 @@
   "license": "ISC",
   "author": "sakin",
   "main": "server.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
     "postinstall": "prisma generate --schema=./prisma/schema",
-    "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts"
+    "dev": "bun run src/server.ts",
+    "seed": "bun run src/app/shared/seedAdmin.ts"
   },
   "devDependencies": {
     "@prisma/client": "^7.0.1",
