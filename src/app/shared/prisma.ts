@@ -1,35 +1,12 @@
-import { PrismaPg } from "@prisma/adapter-pg";
+import "dotenv/config";
+import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from "@prisma/client";
-import { Pool } from "pg";
-
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    max: 20, 
-    idleTimeoutMillis: 30000, 
-});
-const adapter = new PrismaPg(pool);
-
-const prisma = new PrismaClient({
-    adapter,
-    log: [
-        {
-            emit: 'event',
-            level: 'query',
-        },
-        {
-            emit: 'event',
-            level: 'error',
-        },
-        {
-            emit: 'event',
-            level: 'info',
-        },
-        {
-            emit: 'event',
-            level: 'warn',
-        },
-    ],
-})
 
 
-export default prisma;
+
+const connectionString = `${process.env.DATABASE_URL}`
+
+const adapter = new PrismaPg({ connectionString })
+const prisma = new PrismaClient({ adapter })
+
+export { prisma }

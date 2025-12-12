@@ -1,11 +1,9 @@
 import express from "express";
 import { PaymentController } from "./payment.controller";
-
-import { Role } from "@prisma/client";
-
 import { PaymentValidation } from "./payment.validation";
 import validateRequest from "../../middleware/validateRequest";
 import { checkAuth } from "../../middleware/checkAuth";
+import { Role } from "@prisma/client";
 
 
 const router = express.Router();
