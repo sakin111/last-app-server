@@ -1,8 +1,10 @@
-import { prisma } from "../../shared/prisma";
+
 import { QueryBuilder } from "../../shared/QueryBuilder";
 import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
 import { TravelType } from "@prisma/client";
-import AppError from "src/app/error/AppError";
+import prisma from "../../shared/prisma";
+import AppError from "../../error/AppError";
+
 
 const travelSearchableFields = ["title", "destination", "description"];
 

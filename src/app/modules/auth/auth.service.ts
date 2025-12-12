@@ -4,9 +4,9 @@ import httpStatus from "http-status"
 import { generateToken, verifyTokens } from "../../shared/jwt";
 import { envVar } from "../../config/envVar";
 import AppError from "../../error/AppError";
-import { prisma } from "../../shared/prisma";
 import { UserStatus } from "@prisma/client";
 import { JwtPayload } from "jsonwebtoken";
+import prisma from "../../shared/prisma";
 
 
 

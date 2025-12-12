@@ -1,8 +1,9 @@
 import { Server } from 'http'
 import app from './app'
 import { envVar } from './app/config/envVar'
-import { prisma } from './app/shared/prisma'
+
 import { seedAdmin } from './app/shared/seedAdmin'
+import prisma from './app/shared/prisma'
 
 
 

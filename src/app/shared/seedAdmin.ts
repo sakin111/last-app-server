@@ -1,8 +1,11 @@
 import bcryptjs from "bcryptjs";
 import { envVar } from "../config/envVar";
-import { prisma } from "./prisma";
-import { Role, User, UserStatus} from "@prisma/client";
-import { UserCreateInput } from "prisma/schema/generate/models";
+import prisma from "./prisma";
+import { Role, UserStatus } from "@prisma/client";
+
+
+
+
 
 
 
@@ -26,7 +29,7 @@ export const seedAdmin = async () => {
 
     
 
-        const payload:Partial<UserCreateInput>= {
+        const payload:Partial<any>= {
             name: "admin",
             role: Role.ADMIN,
             email: envVar.ADMIN_EMAIL,
@@ -35,7 +38,7 @@ export const seedAdmin = async () => {
         }
 
         const admin = await prisma.user.create({
-            data: payload as UserCreateInput
+            data: payload as any
         })
         console.log("Admin Created Successfully \n");
         console.log(admin);

@@ -1,7 +1,8 @@
 import Stripe from "stripe";
 import { envVar } from "../config/envVar";
-import { prisma } from "./prisma";
+
 import { PaymentStatus } from "@prisma/client";
+import prisma from "./prisma";
 
 const stripe = new Stripe(envVar.STRIPE_SECRET_KEY as string, {
     apiVersion: "2024-06-20" as any

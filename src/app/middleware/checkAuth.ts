@@ -3,9 +3,9 @@ import AppError from "../error/AppError"
 import { envVar } from "../config/envVar"
 import { JwtPayload } from "jsonwebtoken"
 import { verifyTokens } from "../shared/jwt"
-import { prisma } from "../shared/prisma"
 import  httpStatus from "http-status"
 import { UserStatus } from "@prisma/client"
+import prisma from "../shared/prisma"
 
 
 export const checkAuth = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {

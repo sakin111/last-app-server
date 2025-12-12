@@ -1,10 +1,13 @@
 import express from "express";
 import { TravelController } from "./travel.controller";
-import { checkAuth } from "src/app/middleware/checkAuth";
+
 import { Role } from "@prisma/client";
-import validateRequest from "src/app/middleware/validateRequest";
+
 import { TravelValidation } from "./travel.validation";
-import { fileUploader } from "src/app/shared/fileUploader";
+import { checkAuth } from "../../middleware/checkAuth";
+import { fileUploader } from "../../shared/fileUploader";
+import validateRequest from "../../middleware/validateRequest";
+
 
 const router = express.Router();
 

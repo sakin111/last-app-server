@@ -1,8 +1,35 @@
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
+import { Pool } from "pg";
 
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
-
-const adapter = new PrismaPg({ 
-  connectionString: process.env.DATABASE_URL 
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 20, 
+    idleTimeoutMillis: 30000, 
 });
-export const prisma = new PrismaClient({ adapter });
+const adapter = new PrismaPg(pool);
+
+const prisma = new PrismaClient({
+    adapter,
+    log: [
+        {
+            emit: 'event',
+            level: 'query',
+        },
+        {
+            emit: 'event',
+            level: 'error',
+        },
+        {
+            emit: 'event',
+            level: 'info',
+        },
+        {
+            emit: 'event',
+            level: 'warn',
+        },
+    ],
+})
+
+
+export default prisma;

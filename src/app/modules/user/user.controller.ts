@@ -3,8 +3,9 @@ import { UserService } from "./user.service";
 import catchAsync from "../../shared/catchAsync";
 
 import httpStatus from 'http-status'
-import { sendResponse } from "src/app/shared/sendResponse";
-import { prisma } from "src/app/shared/prisma";
+import { sendResponse } from "../../shared/sendResponse";
+import prisma from "../../shared/prisma";
+
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
     const result = await UserService.createUser(req.body)

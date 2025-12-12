@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { ReviewController } from "./review.controller";
-import { checkAuth } from "src/app/middleware/checkAuth";
+
 import { Role } from "@prisma/client";
+import { checkAuth } from "../../middleware/checkAuth";
 
 
 const router = Router();

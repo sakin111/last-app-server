@@ -1,5 +1,6 @@
-import { prisma } from "../../shared/prisma";
-import { QueryBuilder } from "../../shared/QueryBuilder";
+import prisma from "../../shared/prisma";
+
+
 
 const reviewSearchableFields = ["content"]; // match frontend
 

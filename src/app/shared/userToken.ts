@@ -3,9 +3,10 @@ import { JwtPayload } from "jsonwebtoken";
 import httpStatus from "http-status-codes"
 import { envVar } from "../config/envVar";
 import { generateToken, verifyTokens } from "./jwt";
-import { prisma } from "./prisma";
+
 import AppError from "../error/AppError";
 import { User } from "@prisma/client";
+import prisma from "./prisma";
 
 
 export const createUserToken = (user: Partial<User>) =>{

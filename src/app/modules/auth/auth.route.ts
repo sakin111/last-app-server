@@ -1,8 +1,9 @@
 import express from "express"
 
 import { AuthController } from './auth.controller';
-import { checkAuth } from "src/app/middleware/checkAuth";
+
 import { Role } from "@prisma/client";
+import { checkAuth } from "../../middleware/checkAuth";
 
 
 
