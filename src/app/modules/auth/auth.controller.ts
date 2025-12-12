@@ -14,14 +14,14 @@ const login = catchAsync(async (req: Request, res: Response) => {
     } = result;
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
         maxAge: 1000 * 60 * 60
     })
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
-        sameSite: "lax",
+        sameSite: "none",
         maxAge: 1000 * 60 * 60 * 24 * 90
     })
     sendResponse(res, {
@@ -39,8 +39,8 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
     const result = await AuthService.refreshToken(refreshToken);
     res.cookie("accessToken", result.accessToken, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
         maxAge: 1000 * 60 * 60,
     });
 
