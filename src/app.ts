@@ -6,7 +6,7 @@ import { envVar } from "./app/config/envVar";
 import notFound from "./app/error/notFound";
 import globalErrorHandler from "./app/error/globalErrorHandler";
 
-const app: Application = express();
+ export const app: Application = express();
 
 
 app.use(cors());
@@ -36,4 +36,4 @@ app.get("/", (req: Request, res: Response) => {
 app.use(notFound);
 app.use(globalErrorHandler);
 
-export default app;
+
