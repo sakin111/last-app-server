@@ -1,10 +1,13 @@
 import express from 'express';
 import { UserController } from './user.controller';
-import { checkAuth } from 'src/app/middleware/checkAuth';
+
 import { Role } from '@prisma/client';
-import validateRequest from 'src/app/middleware/validateRequest';
+
 import { UserValidation } from './user.validation';
-import { fileUploader } from 'src/app/shared/fileUploader';
+import validateRequest from '../../middleware/validateRequest';
+import { checkAuth } from '../../middleware/checkAuth';
+import { fileUploader } from '../../shared/fileUploader';
+
 
 
 const router = express.Router();

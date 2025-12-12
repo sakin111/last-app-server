@@ -1,4 +1,5 @@
-import { prisma } from "../../shared/prisma";
+
+import prisma from "../../shared/prisma";
 import { QueryBuilder } from "../../shared/QueryBuilder";
 import { RequestStatus } from "@prisma/client";
 

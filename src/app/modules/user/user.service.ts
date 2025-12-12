@@ -1,14 +1,16 @@
-import { Request } from "express";
-import { prisma } from "../../shared/prisma";
+
+
 import { QueryBuilder } from "../../shared/QueryBuilder";
 import bcrypt from "bcryptjs";
 import { userSearchableFields } from "./user.constant";
 import { JwtPayload } from "jsonwebtoken";
 import { Role, UserStatus } from "@prisma/client";
-import { UserCreateInput } from "prisma/schema/generate/models";
-import { uploadMultipleToCloudinary } from "src/app/shared/cloudinary";
+import prisma from "../../shared/prisma";
+import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
 
-const createUser = async (payload: UserCreateInput) => {
+
+
+const createUser = async (payload: any) => {
     const hashPassword = await bcrypt.hash(payload.password, 10);
 
     const result = await prisma.user.create({
