@@ -3,5 +3,5 @@ dist
 .env
 /src/generated/prisma
 uploads
-
+!uploads/gitkeep
 .vercel
