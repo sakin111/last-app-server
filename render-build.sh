@@ -1,5 +1,4 @@
 
-
 set -o errexit
 
 bun install

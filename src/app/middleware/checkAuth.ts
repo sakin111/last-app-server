@@ -4,8 +4,9 @@ import { envVar } from "../config/envVar"
 import { JwtPayload } from "jsonwebtoken"
 import { verifyTokens } from "../shared/jwt"
 import  httpStatus from "http-status"
-import { UserStatus } from "@prisma/client"
+
 import prisma from "../shared/prisma"
+import { UserStatus } from "@prisma/client"
 
 
 export const checkAuth = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
