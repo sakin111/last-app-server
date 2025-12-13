@@ -9,7 +9,6 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "bun run src/server.ts",
-    "seed": "bun run src/app/shared/seedAdmin.ts",
     "postinstall": "prisma generate"
   },
   "devDependencies": {
