@@ -1,11 +1,11 @@
 import { Server } from 'http'
-
 import { envVar } from './app/config/envVar'
-
 import { seedAdmin } from './app/shared/seedAdmin'
-
 import { app } from './app'
 import prisma from './app/shared/prisma'
+import { startTravelCleanupJob, startTravelExpireJob } from './app/modules/travel/travel.service'
+
+
 
 
 
@@ -31,6 +31,8 @@ const StartServer = async () =>{
 (async() =>{
    await StartServer()
    await seedAdmin()
+  startTravelExpireJob();   
+  startTravelCleanupJob();
 })()
 
 process.on("SIGTERM", (err) => {

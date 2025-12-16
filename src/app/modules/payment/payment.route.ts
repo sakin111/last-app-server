@@ -1,23 +1,16 @@
 import express from "express";
 import { PaymentController } from "./payment.controller";
-import { PaymentValidation } from "./payment.validation";
-import validateRequest from "../../middleware/validateRequest";
 import { checkAuth } from "../../middleware/checkAuth";
 import { Role } from "@prisma/client";
-
 
 const router = express.Router();
 
 
+router.post("/subscription", checkAuth(Role.ADMIN), PaymentController.subscribe);
+router.get("/subscriptions", checkAuth(Role.ADMIN), PaymentController.getSubscriptions);
+router.post("/checkout-session", checkAuth(Role.USER), PaymentController.checkoutSession);
+router.delete("/delete", checkAuth(Role.ADMIN), PaymentController.deleteSubscription);
+router.post("/update", checkAuth(Role.ADMIN), PaymentController.updateSubscription);
 
-router.post("/subscribe", checkAuth(Role.USER, Role.ADMIN), validateRequest(PaymentValidation.createSubscriptionValidationSchema), PaymentController.subscribe);
 
-router.post("/checkout-session", checkAuth(Role.USER, Role.ADMIN), PaymentController.checkoutSession);
-
-router.post("/payment-intent", checkAuth(Role.USER, Role.ADMIN), PaymentController.paymentIntent);
-
-router.post("/payment", checkAuth(Role.USER, Role.ADMIN), validateRequest(PaymentValidation.createPaymentValidationSchema), PaymentController.createPayment);
-
-router.get("/", checkAuth(Role.ADMIN), PaymentController.getSubscriptions);
-
-export const paymentRouter = router;
+export const paymentRoute = router;

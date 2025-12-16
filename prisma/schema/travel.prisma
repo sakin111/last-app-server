@@ -8,6 +8,8 @@ model TravelPlan {
   budgetRange   String
   travelType    TravelType
   description   String
+  isExpired  Boolean  @default(false)
+  expiredAt  DateTime?
   visibility    Boolean   @default(true)
   images        String[]
   createdAt     DateTime  @default(now())

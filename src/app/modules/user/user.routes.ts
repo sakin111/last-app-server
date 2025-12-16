@@ -50,5 +50,12 @@ router.patch(
     checkAuth(Role.ADMIN, Role.USER),
     UserController.updatedUser
 );
+router.delete(
+    '/delete/:id',
+    checkAuth(Role.ADMIN),
+    UserController.deleteUser
+);
+
+
 
 export const userRouter = router;

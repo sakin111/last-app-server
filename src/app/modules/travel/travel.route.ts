@@ -18,6 +18,7 @@ router.get("/getTravel", TravelController.Travel);
 router.get("/myTravel",checkAuth(Role.USER), TravelController.myTravel);
 router.get("/:id", TravelController.getTravel);
 router.patch("/:id",checkAuth(Role.USER, Role.ADMIN), TravelController.updateTravel);
-router.get("/:id",checkAuth(Role.USER, Role.ADMIN), TravelController.deleteTravel);
+router.delete("/:id",checkAuth(Role.USER, Role.ADMIN), TravelController.deleteTravel);
+
 
 export const travelRouter = router;

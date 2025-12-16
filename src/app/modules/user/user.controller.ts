@@ -20,17 +20,21 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 
 
 const AllUser = catchAsync(async (req: Request, res: Response) => {
-    const query = req.query
-    const result = await UserService.getAllFromDB(query as Record<string,string>)
-    sendResponse(res,{
-       statusCode: 200,
-       success:true,
-       message:"User retrieve successfully",
-       meta: result.meta,
-       data: result.data
-    })
-}
-)
+  // const query = {...req.query} as Record<string, unknown>;
+
+  // const result = await UserService.getAllFromDB();
+  const users = await prisma.user.findMany();
+  // query as Record<string, string>
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User retrieved successfully",
+    // meta: result.meta,
+    // data: result.data,
+    data: users
+  });
+});
+
 
 const getMyProfile = catchAsync(async (req: Request  , res: Response) => {
 
@@ -102,7 +106,16 @@ const updateProfileImage = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id
+  const result = await UserService.deleteUser(id as string);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "user Deleted successfully",
+    data: result
+  });
+});
 
 
 export const UserController = {
@@ -112,5 +125,6 @@ export const UserController = {
  changeProfileStatus,
  getMyNotifications,
  updatedUser,
- updateProfileImage
+ updateProfileImage,
+ deleteUser
 }

@@ -44,14 +44,8 @@ const getAll = catchAsync(async (req: Request, res: Response) => {
 const updateTravel = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const userId = req.user?.id;
-  const files = req.files as Express.Multer.File[];
-  
-  const updateData = {
-    ...req.body,
-    images: files?.map(file => file.path)
-  };
 
-  const result = await TravelService.updateTravel(id, userId, updateData);
+  const result = await TravelService.updateTravel(id, userId, req?.body);
 
   sendResponse(res, {
     statusCode: 200,

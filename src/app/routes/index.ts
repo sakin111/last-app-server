@@ -4,7 +4,9 @@ import { userRouter } from "../modules/user/user.routes";
 import { travelRouter } from "../modules/travel/travel.route";
 import { reviewRouter } from "../modules/review/review.route";
 import { requestRouter } from "../modules/request/request.route";
-import { paymentRouter } from "../modules/payment/payment.route";
+
+import { SubPlan } from "../modules/subPlan/subPlan.route";
+import { paymentRoute } from "../modules/payment/payment.route";
 
 
 const router = express.Router();
@@ -32,7 +34,11 @@ const moduleRoutes = [
     },
     {
         path: '/payment',
-        route: paymentRouter
+        route: paymentRoute
+    },
+    {
+        path: '/sub',
+        route: SubPlan
     },
 
  

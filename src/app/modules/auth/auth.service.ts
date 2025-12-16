@@ -54,12 +54,16 @@ const refreshToken = async (token: string) => {
         throw new Error("You are not authorized!")
     }
 
-    const userData = await prisma.user.findUniqueOrThrow({
+    const userData = await prisma.user.findUnique({
         where: {
             email: decodedData.email,
             userStatus: "ACTIVE"
         }
     });
+
+    if (!userData) {
+        throw new AppError(401, "User not found or not authorized");
+    }
 
     const accessToken = generateToken({
         email: userData.email,

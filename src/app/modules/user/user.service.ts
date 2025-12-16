@@ -46,26 +46,37 @@ const getMyProfile = async (user: JwtPayload) => {
     return userInfo;
 };
 
-const getAllFromDB = async (query: Record<string, string>) => {
+// const getAllFromDB = async () => {
+// // query: Record<string, string>
+//    const users = await prisma.user.findMany();
 
-    const queryBuilder = new QueryBuilder(prisma.user, query);
-    const usersData = queryBuilder
-        .filter()
-        .search(userSearchableFields)
-        .sort()
-        .fields()
-        .paginate();
+// return {
+//   data: users,
+//   meta: {
+//       total: users.length,
+//       page: 1,
+//       limit: users.length,
+//       totalPage: ""
+//   },
+// };
 
-    const [data, meta] = await Promise.all([
-        usersData.build(),
-        queryBuilder.getMeta()
-    ]);
+//     // const usersData = queryBuilder
+//     //     .filter()
+//     //     .search(userSearchableFields)
+//     //     .sort()
+//     //     .fields()
+//     //     .paginate();
 
-    return {
-        data,
-        meta
-    };
-};
+//     // const [data, meta] = await Promise.all([
+//     //     usersData.build(),
+//     //     queryBuilder.getMeta()
+//     // ]);
+
+//     // return {
+//     //     data,
+//     //     meta
+//     // };
+// };
 
 
 const changeProfileStatus = async (
@@ -104,6 +115,21 @@ const updatedUser = async (
 
     return updatedUser;
 };
+
+
+
+const deleteUser = async (id: string) => {
+
+    const result = await prisma.user.delete({
+        where: { id },
+    });
+
+
+    return result;
+};
+
+
+
 const updateProfileImage = async (
     id: string,
     files?: Express.Multer.File[]
@@ -128,9 +154,10 @@ const updateProfileImage = async (
 
 export const UserService = {
     createUser,
-    getAllFromDB,
+    // getAllFromDB,
     getMyProfile,
     changeProfileStatus,
     updatedUser,
-    updateProfileImage
+    updateProfileImage,
+    deleteUser
 };
