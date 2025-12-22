@@ -4,6 +4,9 @@ model Plan {
   price     Float
   stripeId  String   @unique
   duration  Int     
+  active    Boolean  @default(true)
+  subscriptions Subscription[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+

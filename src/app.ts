@@ -5,22 +5,29 @@ import router from "./app/routes";
 import { envVar } from "./app/config/envVar";
 import notFound from "./app/error/notFound";
 import globalErrorHandler from "./app/error/globalErrorHandler";
+import { WebhookController } from "./app/modules/payment/webhook.controller";
 
- export const app: Application = express();
+export const app: Application = express();
 
 
-app.use(cors());
+app.use(cors({
+  origin: envVar.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+}));
+
+app.post(
+  "/api/v1/payment/webhook",
+  express.raw({ type: "application/json" }),
+  WebhookController.stripeWebhook
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
-app.use(
-  "/api/v1/payment/webhook",
-  express.raw({ type: "application/json" })
-);
 
-// Routes
+
 app.use("/api/v1", router);
 
 app.get("/", (req: Request, res: Response) => {

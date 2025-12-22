@@ -8,7 +8,6 @@ export class QueryBuilder<M extends keyof PrismaClient> {
   private orderBy: any[] = [];
   private select: any = undefined;
   private include: any = undefined;
-
   private take: number | undefined;
   private skip: number | undefined;
 
@@ -17,17 +16,34 @@ export class QueryBuilder<M extends keyof PrismaClient> {
     this.query = query;
   }
 
+  /**
+   * Filter query parameters, excluding special fields
+   * @param excludeFields - Fields to exclude from filtering
+   */
   filter(excludeFields: string[] = []): this {
     const filter = { ...this.query };
-    for (const key of excludeFields) delete filter[key];
+    
+    // Remove excluded fields
+    excludeFields.forEach(field => delete filter[field]);
+    
+    // Remove empty/null/undefined values
+    Object.keys(filter).forEach(key => {
+      if (filter[key] === undefined || filter[key] === null || filter[key] === '') {
+        delete filter[key];
+      }
+    });
 
     this.where = { ...this.where, ...filter };
     return this;
   }
 
+  /**
+   * Add search functionality across multiple fields
+   * @param searchableFields - Fields to search in
+   */
   search(searchableFields: string[]): this {
     const term = this.query.searchTerm;
-    if (!term) return this;
+    if (!term || searchableFields.length === 0) return this;
 
     this.where.OR = searchableFields.map((field) => ({
       [field]: { contains: term, mode: "insensitive" },
@@ -36,66 +52,105 @@ export class QueryBuilder<M extends keyof PrismaClient> {
     return this;
   }
 
+  /**
+   * Add sorting
+   * Format: "field1,-field2" (- prefix for descending)
+   */
   sort(): this {
     if (!this.query.sort) return this;
-    const fields = this.query.sort.split(",");
+    
+    const fields = this.query.sort.split(",").filter(Boolean);
 
     this.orderBy = fields.map((item: string) => {
       const order = item.startsWith("-") ? "desc" : "asc";
-      const field = item.replace("-", "");
+      const field = item.replace(/^-/, "");
       return { [field]: order };
     });
 
     return this;
   }
 
+  /**
+   * Select specific fields
+   * Format: "field1,field2,field3"
+   */
   fields(): this {
     if (!this.query.fields) return this;
 
-    this.select = this.query.fields.split(",").reduce((acc: any, f: string) => {
-      acc[f] = true;
-      return acc;
-    }, {});
+    this.select = this.query.fields
+      .split(",")
+      .filter(Boolean)
+      .reduce((acc: any, field: string) => {
+        acc[field.trim()] = true;
+        return acc;
+      }, {});
+    
     return this;
   }
 
+  /**
+   * Include relations
+   * Format: "relation1,relation2"
+   */
   relation(): this {
     if (!this.query.include) return this;
 
-    this.include = this.query.include.split(",").reduce((acc: any, f: string) => {
-      acc[f] = true;
-      return acc;
-    }, {});
+    this.include = this.query.include
+      .split(",")
+      .filter(Boolean)
+      .reduce((acc: any, relation: string) => {
+        acc[relation.trim()] = true;
+        return acc;
+      }, {});
+    
     return this;
   }
 
+  /**
+   * Add pagination
+   */
   paginate(): this {
-    const page = Number(this.query.page) || 1;
-    const limit = Number(this.query.limit) || 10;
+    const page = Math.max(1, Number(this.query.page) || 1);
+    const limit = Math.min(100, Math.max(1, Number(this.query.limit) || 10));
 
     this.take = limit;
     this.skip = (page - 1) * limit;
     return this;
   }
 
+  /**
+   * Build and execute the query
+   */
   async build() {
-    return this.model.findMany({
+    const options: any = {
       where: this.where,
-      orderBy: this.orderBy.length ? this.orderBy : undefined,
-      select: this.select,
-      include: this.include,
-      take: this.take,
-      skip: this.skip,
-    });
+    };
+
+    if (this.orderBy.length) options.orderBy = this.orderBy;
+    if (this.select) options.select = this.select;
+    if (this.include) options.include = this.include;
+    if (this.take !== undefined) options.take = this.take;
+    if (this.skip !== undefined) options.skip = this.skip;
+
+    return await this.model.findMany(options);
   }
+
 
   async getMeta() {
     const total = await this.model.count({ where: this.where });
 
-    const page = Number(this.query.page) || 1;
-    const limit = Number(this.query.limit) || 10;
+    const page = Math.max(1, Number(this.query.page) || 1);
+    const limit = Math.min(100, Math.max(1, Number(this.query.limit) || 10));
     const totalPage = Math.ceil(total / limit);
 
-    return { page, limit, total, totalPage };
+    return { 
+      page, 
+      limit, 
+      total, 
+      totalPage,
+      hasNextPage: page < totalPage,
+      hasPrevPage: page > 1
+    };
   }
 }
+

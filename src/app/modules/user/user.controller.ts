@@ -5,6 +5,9 @@ import catchAsync from "../../shared/catchAsync";
 import httpStatus from 'http-status'
 import { sendResponse } from "../../shared/sendResponse";
 import prisma from "../../shared/prisma";
+import { QueryParser } from "../../shared/QueryParser";
+import { getUploadedFiles } from "../../shared/fileUploader";
+import AppError from "../../error/AppError";
 
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
@@ -20,21 +23,18 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 
 
 const AllUser = catchAsync(async (req: Request, res: Response) => {
-  // const query = {...req.query} as Record<string, unknown>;
 
-  // const result = await UserService.getAllFromDB();
-  const users = await prisma.user.findMany();
-  // query as Record<string, string>
+const queryParams = QueryParser.toStringRecord(req.query);
+  const result = await UserService.getAllFromDB(queryParams);
+
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "User retrieved successfully",
-    // meta: result.meta,
-    // data: result.data,
-    data: users
+    message: "Users retrieved successfully",
+    meta: result.meta,
+    data: result.data,
   });
 });
-
 
 const getMyProfile = catchAsync(async (req: Request  , res: Response) => {
 
@@ -97,7 +97,10 @@ const updatedUser = catchAsync(async (req: Request, res: Response) => {
 const updateProfileImage = catchAsync(async (req: Request, res: Response) => {
 
   const id = req.user?.id;
-  const result = await UserService.updateProfileImage(id as string, req.files as Express.Multer.File[]);
+  const files = getUploadedFiles(req)
+
+
+  const result = await UserService.updateProfileImage(id as string,files);
   sendResponse(res, {
     statusCode: 200,
     success: true,

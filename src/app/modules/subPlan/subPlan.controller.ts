@@ -35,12 +35,12 @@ const createPlanController = catchAsync(async (req: Request, res: Response) => {
 });
 
  const getAllPlansController = catchAsync(async (_req: Request, res: Response) => {
-  const plans = await planService.getAllPlans();
+  const result = await planService.getAllPlans();
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Plans retrieved successfully",
-    data: plans,
+    data: result,
   });
 });
 

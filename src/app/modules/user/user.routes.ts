@@ -10,6 +10,7 @@ import { fileUploader } from '../../shared/fileUploader';
 
 
 
+
 const router = express.Router();
 
 router.post(
@@ -19,7 +20,7 @@ router.post(
 ),
 router.patch(
     "/update-profileImage",checkAuth(Role.ADMIN, Role.USER),
-    fileUploader,
+    fileUploader('profileImage', 1),
     UserController.updateProfileImage
 ),
 
@@ -37,7 +38,7 @@ router.get(
 
 
 router.get(
-    "/allUser",checkAuth(Role.ADMIN), UserController.AllUser
+    "/allUser",checkAuth(Role.ADMIN,Role.USER), UserController.AllUser
 )
 
 router.patch(

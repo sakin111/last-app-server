@@ -6,11 +6,17 @@ import { Role } from "@prisma/client";
 const router = express.Router();
 
 
-router.post("/subscription", checkAuth(Role.ADMIN), PaymentController.subscribe);
-router.get("/subscriptions", checkAuth(Role.ADMIN), PaymentController.getSubscriptions);
-router.post("/checkout-session", checkAuth(Role.USER), PaymentController.checkoutSession);
-router.delete("/delete", checkAuth(Role.ADMIN), PaymentController.deleteSubscription);
-router.post("/update", checkAuth(Role.ADMIN), PaymentController.updateSubscription);
+router.get("/success", PaymentController.checkoutSuccess);
+router.get("/cancel", PaymentController.checkoutCancel);
 
+
+router.post("/checkout-session", checkAuth(Role.USER), PaymentController.checkoutSession);
+router.get("/my-subscription", checkAuth(Role.USER), PaymentController.getMySubscription);
+router.post("/cancel-subscription", checkAuth(Role.USER), PaymentController.cancelMySubscription);
+
+
+router.get("/subscriptions", checkAuth(Role.ADMIN), PaymentController.getSubscriptions);
+router.patch("/subscriptions/:subscriptionId", checkAuth(Role.ADMIN), PaymentController.updateSubscription);
+router.delete("/subscriptions/:subscriptionId", checkAuth(Role.ADMIN), PaymentController.deleteSubscription);
 
 export const paymentRoute = router;

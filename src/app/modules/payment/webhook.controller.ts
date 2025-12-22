@@ -2,33 +2,28 @@ import { Request, Response } from "express";
 import {
     verifyWebhookSignature,
     handleCheckoutSessionCompleted,
-    handlePaymentIntentSucceeded,
-    handlePaymentIntentFailed
 } from "../../shared/stripe";
 import { sendResponse } from "../../shared/sendResponse";
 import AppError from "../../error/AppError";
 import httpStatus from "http-status";
+
+// Optional: stub functions for payment_intent events
+const handlePaymentIntentSucceeded = async (paymentIntent: any) => {
+  console.log("PaymentIntent succeeded:", paymentIntent.id);
+};
+const handlePaymentIntentFailed = async (paymentIntent: any) => {
+  console.log("PaymentIntent failed:", paymentIntent.id);
+};
 
 const stripeWebhook = async (req: Request, res: Response) => {
     try {
         const signature = req.headers["stripe-signature"] as string;
         const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-        if (!webhookSecret) {
-            throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Webhook secret not configured");
-        }
+        if (!webhookSecret) throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Webhook secret not configured");
+        if (!signature) throw new AppError(httpStatus.BAD_REQUEST, "Missing Stripe signature");
 
-        if (!signature) {
-            throw new AppError(httpStatus.BAD_REQUEST, "Missing Stripe signature");
-        }
-
-
-        const event = verifyWebhookSignature(
-            req.body as any,
-            signature,
-            webhookSecret
-        );
-
+        const event = verifyWebhookSignature(req.body as any, signature, webhookSecret);
 
         switch (event.type) {
             case "checkout.session.completed":

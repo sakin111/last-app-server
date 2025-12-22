@@ -1,27 +1,46 @@
 import prisma from "../../shared/prisma";
 import { QueryBuilder } from "../../shared/QueryBuilder";
-import { createCheckoutSession, handleCheckoutCancel, handleCheckoutSessionCompleted, handleCheckoutSuccess  } from "../../shared/stripe";
+import stripe, { 
+  createCheckoutSession, 
+  handleCheckoutCancel, 
+  handleCheckoutSessionCompleted, 
+  handleCheckoutSuccess,
+} from "../../shared/stripe";
 import { PaymentStatus } from "@prisma/client";
 
 const subscriptionSearchableFields: string[] = ["plan", "paymentStatus"];
 
-const createSubscription = async (payload: any, userId: string) => {
+const createSubscription = async (
+  payload: { planId: string },
+  userId: string
+) => {
   const startDate = new Date();
-  const endDate = payload.endDate ? new Date(payload.endDate) : new Date(Date.now() + 30*24*60*60*1000);
+  const endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-  const subscription = await prisma.subscription.create({
-    data: {
-      user: { connect: { id: userId } },
-      plan: payload.plan,
+  const plan = await prisma.plan.findUniqueOrThrow({
+    where: { id: payload.planId },
+  });
+
+  return prisma.subscription.upsert({
+    where: { userId }, // 👈 unique field
+    update: {
+      planId: plan.id,
       startDate,
       endDate,
       active: false,
-      paymentStatus: PaymentStatus.PENDING
-    }
+      paymentStatus: "PENDING",
+    },
+    create: {
+      userId,
+      planId: plan.id,
+      startDate,
+      endDate,
+      active: false,
+      paymentStatus: "PENDING",
+    },
   });
-
-  return subscription;
 };
+
 
 const updateSubscription = async (subscriptionId: string, payload: any) => {
   return prisma.subscription.update({
@@ -51,12 +70,31 @@ const getAllSubscriptions = async (query: Record<string, string>) => {
   return { data, meta };
 };
 
-const createCheckoutSessionForSubscription = async (userId: string, priceId: string, plan: string, successUrl: string, cancelUrl: string) => {
-  const subscription = await createSubscription({ plan }, userId);
+const createCheckoutSessionForSubscription = async (
+  userId: string, 
+  stripePriceId: string, 
+  planId: string, 
+  successUrl: string, 
+  cancelUrl: string
+) => {
+
+  const existingSubscription = await prisma.subscription.findFirst({
+    where: { userId, active: true }
+  });
+
+  if (existingSubscription) {
+    throw new Error("User already has an active subscription");
+  }
+
+  const subscription = await createSubscription({ planId }, userId);
+
+  const user = await prisma.user.findUniqueOrThrow({ 
+    where: { id: userId } 
+  });
 
   const session = await createCheckoutSession({
-    priceId,
-    customerEmail: (await prisma.user.findUniqueOrThrow({ where: { id: userId } })).email!,
+    stripePriceId,
+    customerEmail: user.email!,
     subscriptionId: subscription.id,
     successUrl,
     cancelUrl
@@ -65,13 +103,42 @@ const createCheckoutSessionForSubscription = async (userId: string, priceId: str
   return { subscription, sessionId: session.id, sessionUrl: session.url };
 };
 
+
+const getActiveSubscription = async (userId: string) => {
+  return prisma.subscription.findFirst({
+    where: {
+      userId,
+      active: true,
+      endDate: { gte: new Date() }
+    },
+    include: {
+      user: true
+    }
+  });
+};
+
+
+const hasActiveSubscription = async (userId: string): Promise<boolean> => {
+  const subscription = await getActiveSubscription(userId);
+  return !!subscription;
+};
+
+
+
+
+
+
+
 export const PaymentService = {
   createSubscription,
   updateSubscription,
   deleteSubscription,
   getAllSubscriptions,
   createCheckoutSessionForSubscription,
+  getActiveSubscription,           
+  hasActiveSubscription,            
   handleCheckoutSessionCompleted,
   handleCheckoutSuccess,
-  handleCheckoutCancel
-};
+  handleCheckoutCancel,
+   
+}  

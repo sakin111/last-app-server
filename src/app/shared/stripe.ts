@@ -10,7 +10,7 @@ const stripe = new Stripe(envVar.STRIPE_SECRET_KEY as string, {
 
 
 export const createCheckoutSession = async (params: {
-  priceId: string;
+  stripePriceId: string;
   successUrl: string;
   cancelUrl: string;
   customerEmail: string;
@@ -22,7 +22,7 @@ export const createCheckoutSession = async (params: {
     customer_email: params.customerEmail,
     line_items: [
       {
-        price: params.priceId,
+        price: params.stripePriceId,
         quantity: 1,
       },
     ],
@@ -60,6 +60,8 @@ export const handleCheckoutSessionCompleted = async (
     data: {
       active: true,
       paymentStatus: PaymentStatus.COMPLETED,
+      stripeSubscriptionId: session.subscription as string,
+      stripeCustomerId: session.customer as string, 
     },
   });
 
@@ -73,6 +75,8 @@ export const handleCheckoutSessionCompleted = async (
   });
 
   return { success: true };
+
+
 };
 
 
@@ -83,15 +87,27 @@ export const handleCheckoutSuccess = async (sessionId: string) => {
 };
 
 export const handleCheckoutCancel = async (sessionId: string) => {
-  const session = await stripe.checkout.sessions.retrieve(sessionId);
-  const metadata = session.metadata as { subscriptionId?: string };
-  if (!metadata?.subscriptionId) throw new Error("Missing subscriptionId");
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const metadata = session.metadata as { subscriptionId?: string };
+    
+    if (!metadata?.subscriptionId) {
+      throw new Error("Missing subscriptionId");
+    }
 
-  await prisma.subscription.update({
-    where: { id: metadata.subscriptionId },
-    data: { active: false, paymentStatus: PaymentStatus.FAILED },
-  });
-
+    await prisma.subscription.update({
+      where: { id: metadata.subscriptionId },
+      data: { 
+        active: false, 
+        paymentStatus: PaymentStatus.FAILED 
+      },
+    });
+    
+    return { success: true };
+  } catch (error) {
+    console.error("Error handling checkout cancel:", error);
+    throw error;
+  }
 };
 
 

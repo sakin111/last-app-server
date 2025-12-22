@@ -12,3 +12,4 @@ import Jwt, { JwtPayload, SignOptions } from "jsonwebtoken"
     const verifiedToken = Jwt.verify(token,secret)
     return verifiedToken
 }
+

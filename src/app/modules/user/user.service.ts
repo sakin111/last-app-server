@@ -2,11 +2,12 @@
 
 import { QueryBuilder } from "../../shared/QueryBuilder";
 import bcrypt from "bcryptjs";
-import { userSearchableFields } from "./user.constant";
+import { userFilterableFields, userSearchableFields } from "./user.constant";
 import { JwtPayload } from "jsonwebtoken";
 import { Role, UserStatus } from "@prisma/client";
 import prisma from "../../shared/prisma";
 import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
+
 
 
 
@@ -46,38 +47,30 @@ const getMyProfile = async (user: JwtPayload) => {
     return userInfo;
 };
 
-// const getAllFromDB = async () => {
-// // query: Record<string, string>
-//    const users = await prisma.user.findMany();
 
-// return {
-//   data: users,
-//   meta: {
-//       total: users.length,
-//       page: 1,
-//       limit: users.length,
-//       totalPage: ""
-//   },
-// };
+const getAllFromDB = async (query: Record<string, string>) => {
+ 
 
-//     // const usersData = queryBuilder
-//     //     .filter()
-//     //     .search(userSearchableFields)
-//     //     .sort()
-//     //     .fields()
-//     //     .paginate();
+  const queryBuilder = new QueryBuilder(prisma.user, query);
 
-//     // const [data, meta] = await Promise.all([
-//     //     usersData.build(),
-//     //     queryBuilder.getMeta()
-//     // ]);
+  const usersData = queryBuilder
+    .filter(userFilterableFields) 
+    .search(userSearchableFields)
+    .sort()
+    .fields()
+    .relation() 
+    .paginate();
 
-//     // return {
-//     //     data,
-//     //     meta
-//     // };
-// };
+  const [data, meta] = await Promise.all([
+    usersData.build(),
+    queryBuilder.getMeta()
+  ]);
 
+  return {
+    data,
+    meta
+  };
+};
 
 const changeProfileStatus = async (
     id: string,
@@ -131,30 +124,34 @@ const deleteUser = async (id: string) => {
 
 
 const updateProfileImage = async (
-    id: string,
-    files?: Express.Multer.File[]
+  id: string,
+  files?: Express.Multer.File[]
 ) => {
+  if (!files || files.length === 0) {
+    throw new Error("No file provided");
+  }
 
-      const filePaths = files?.map(f => f.path) || [];
-      const imageUrls = filePaths.length
-        ? await uploadMultipleToCloudinary(filePaths)
-        : [];
-    await prisma.user.findUniqueOrThrow({
-        where: { id },
-    });
+  const filePaths = [files[0].path];
 
-    const updatedUser = await prisma.user.update({
-        where: { id },
-        data: { profileImage: imageUrls[0] || null }
-    });
+  const imageUrls = await uploadMultipleToCloudinary(filePaths);
 
-    return updatedUser;
+  await prisma.user.findUniqueOrThrow({
+    where: { id },
+  });
+
+  const updatedUser = await prisma.user.update({
+    where: { id },
+    data: { profileImage: imageUrls[0] },
+  });
+
+  return updatedUser;
 };
+
 
 
 export const UserService = {
     createUser,
-    // getAllFromDB,
+    getAllFromDB,
     getMyProfile,
     changeProfileStatus,
     updatedUser,

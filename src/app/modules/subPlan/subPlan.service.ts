@@ -8,7 +8,12 @@ import prisma from "../../shared/prisma";
   duration: number;
 }) => {
   const plan = await prisma.plan.create({
-    data: payload,
+      data: {
+      name: payload.name,
+      price: payload.price,
+      stripeId: payload.stripeId,
+      duration: payload.duration,
+    },
   });
   return plan;
 };
@@ -27,7 +32,8 @@ import prisma from "../../shared/prisma";
 };
 
  const getAllPlans = async () => {
-  return prisma.plan.findMany();
+  const result = await prisma.plan.findMany();
+  return result
 };
 
 export const planService = {

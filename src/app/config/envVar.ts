@@ -18,11 +18,12 @@ export interface interConfig {
     CLOUDINARY_API_CLOUD: string,
     CLOUDINARY_API_KEY: string,
     CLOUDINARY_API_SECRET: string,
-    STRIPE_SECRET_KEY: string
+    STRIPE_SECRET_KEY: string,
+    FRONTEND_URL:string
 }
 
 const envProvider = (): interConfig => {
-    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV','JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE','JWT_RESET_EXPIRE_IN','JWT_REFRESH_EXPIRE','RESET_PASS_LINK','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY']
+    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV','JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE','JWT_RESET_EXPIRE_IN','JWT_REFRESH_EXPIRE','RESET_PASS_LINK','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY','FRONTEND_URL']
     configKey.forEach((key) => {
         if (!process.env[key]) {
             throw new Error("key is missing in the env")
@@ -44,7 +45,8 @@ const envProvider = (): interConfig => {
     CLOUDINARY_API_CLOUD: process.env.CLOUDINARY_API_CLOUD as string,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
+    FRONTEND_URL: process.env.FRONTEND_URL as string
     }
 
 }
