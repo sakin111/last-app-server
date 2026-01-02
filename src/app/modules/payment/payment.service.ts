@@ -6,7 +6,7 @@ import stripe, {
   handleCheckoutSessionCompleted, 
   handleCheckoutSuccess,
 } from "../../shared/stripe";
-import { PaymentStatus } from "@prisma/client";
+
 
 const subscriptionSearchableFields: string[] = ["plan", "paymentStatus"];
 
@@ -22,7 +22,7 @@ const createSubscription = async (
   });
 
   return prisma.subscription.upsert({
-    where: { userId }, // 👈 unique field
+    where: { userId }, 
     update: {
       planId: plan.id,
       startDate,

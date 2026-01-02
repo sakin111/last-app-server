@@ -9,6 +9,7 @@ cloudinary.config({
 });
 
 
+
 export const uploadMultipleToCloudinary = async (filePaths: string[], folder: string = "travel-buddy/travels") => {
   try {
     const uploadPromises = filePaths.map(async filePath => {

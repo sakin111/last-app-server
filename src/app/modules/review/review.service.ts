@@ -1,8 +1,9 @@
+import AppError from "../../error/AppError";
 import prisma from "../../shared/prisma";
 
 
 
-const reviewSearchableFields = ["content"]; // match frontend
+const reviewSearchableFields = ["content"]; 
 
 const addReview = async (targetId: string, authorId: string, payload: { rating: number; content: string }) => {
   const review = await prisma.review.create({
@@ -24,11 +25,16 @@ const getReviewsByTravelId = async (travelId: string) => {
     },
     orderBy: { createdAt: "desc" },
   });
+ 
+  if(!reviews){
+    return null
+  }
+
   return reviews;
 };
 
 const getReviewById = async (reviewId: string) => {
-  return prisma.review.findUniqueOrThrow({
+  return prisma.review.findUnique({
     where: { id: reviewId },
     include: {
       author: { select: { id: true, fullName: true, profileImage: true } },
@@ -39,14 +45,31 @@ const getReviewById = async (reviewId: string) => {
 
 const getAllReviews = async () => {
   return prisma.review.findMany({
-    include: { author: true, target: true },
+    include: { author: {select:{id:true,name:true,email:true,bio:true}}, target: true },
     orderBy: { createdAt: "desc" },
   });
 };
+
+const individualReview = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      reviewsReceived: true,
+    },
+  });
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+  return user.reviewsReceived;
+};
+
+
 
 export const ReviewService = {
   addReview,
   getReviewsByTravelId,
   getReviewById,
   getAllReviews,
+  individualReview
 };

@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import catchAsync from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { TravelService } from "./travel.service";
+import { getUploadedFiles } from "../../shared/fileUploader";
 
 const createTravel = catchAsync(async (req: Request, res: Response) => {
-	 const user = req.user
-	const files =req.files as Express.Multer.File[] || []
-	const result = await TravelService.createTravel(req.body, user.id, files);
+	 const id = req.user?.id
+	const files = getUploadedFiles(req)
+	const result = await TravelService.createTravel(req.body, id, files);
 
 	sendResponse(res, {
 		statusCode: 201,

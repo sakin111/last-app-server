@@ -12,5 +12,6 @@ router.post("/:targetId/reviews", checkAuth(Role.USER, Role.ADMIN), ReviewContro
 router.get("/:targetId/reviews", ReviewController.getReviewsByTravelId);
 router.get("/:reviewId", ReviewController.getReviewById);
 router.get("/getAll", ReviewController.getAllReviews);
+router.get("/individual",checkAuth(Role.USER), ReviewController.individualReview);
 
 export const reviewRouter = router;

@@ -49,12 +49,33 @@ const getMyProfile = catchAsync(async (req: Request  , res: Response) => {
     })
 }
 )
+const PublicProfile = catchAsync(async (req: Request  , res: Response) => {
+
+
+    const id = req.params.id as string
+
+    const result = await UserService.PublicProfile(id);
+
+      if (!result) {
+    return res.status(404).json({ message: "User not found" });
+  }
+    sendResponse(res,{
+       statusCode: 200,
+       success:true,
+       message:"User retrieve successfully",
+       data: result
+    })
+}
+)
 
 
 const changeProfileStatus = catchAsync(async (req: Request, res: Response) => {
 
     const { id } = req.params;
-    const result = await UserService.changeProfileStatus(id, req.body)
+    const payload =  req.body
+    
+
+    const result = await UserService.changeProfileStatus(id, payload)
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -129,5 +150,6 @@ export const UserController = {
  getMyNotifications,
  updatedUser,
  updateProfileImage,
- deleteUser
+ deleteUser,
+ PublicProfile
 }

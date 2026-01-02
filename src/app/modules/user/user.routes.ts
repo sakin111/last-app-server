@@ -29,6 +29,10 @@ router.get(
      checkAuth(Role.ADMIN, Role.USER),
      UserController.getMyProfile
 ),
+router.get(
+    "/profile/public/:id",
+     UserController.PublicProfile
+),
 
 router.get(
     "/notifications",

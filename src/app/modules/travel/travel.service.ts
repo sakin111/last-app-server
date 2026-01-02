@@ -7,6 +7,7 @@ import AppError from "../../error/AppError";
 import cron from "node-cron"
 
 
+
 const travelSearchableFields = ["title", "destination", "description"];
 
 const createTravel = async (
@@ -18,10 +19,14 @@ const createTravel = async (
     throw new Error("authorId is required");
   }
 
-  const filePaths = files?.map(f => f.path) || [];
-  const imageUrls = filePaths.length
-    ? await uploadMultipleToCloudinary(filePaths)
-    : [];
+if (!files || files.length === 0) {
+    throw new Error("No file provided");
+  }
+
+  const filePaths = [files[0].path];
+
+  const imageUrls = await uploadMultipleToCloudinary(filePaths);
+
 
   const result = await prisma.travelPlan.create({
     data: {
@@ -32,16 +37,16 @@ const createTravel = async (
       budgetRange: payload.budgetRange,
       travelType: payload.travelType as TravelType,
       description: payload.description,
-      visibility: Boolean(payload.visibility)?? true,
+      visibility: Boolean(payload.visibility) ?? true,
       images: imageUrls,
       author: {
         connect: { id: authorId },
       },
     },
-    include:{
-       author:{
-        select: { id: true, email: true, fullName: true, name: true, isActive:true }
-       }
+    include: {
+      author: {
+        select: { id: true, email: true, fullName: true, name: true, isActive: true }
+      }
     }
   });
 
@@ -63,13 +68,13 @@ export const startTravelExpireJob = () => {
           },
           isExpired: false
         },
-        data:{
-          isExpired:true,
+        data: {
+          isExpired: true,
           expiredAt: now,
         }
       });
 
-          if (result.count > 0) {
+      if (result.count > 0) {
         console.log(`⏳ Marked ${result.count} travels as expired`);
       }
     } catch (error) {
@@ -84,7 +89,7 @@ export const startTravelCleanupJob = () => {
   cron.schedule("0 * * * *", async () => {
     try {
       const cutoff = new Date(
-        Date.now() - 24 * 60 * 60 * 1000 
+        Date.now() - 24 * 60 * 60 * 1000
       );
 
       const result = await prisma.travelPlan.deleteMany({
@@ -108,35 +113,39 @@ export const startTravelCleanupJob = () => {
 
 
 const getTravelById = async (id: string) => {
-	const travel = await prisma.travelPlan.findUniqueOrThrow({
-		where: { id },
-		include: {
-			author: {
-				select: { id: true, email: true, fullName: true, name: true }
-			}
-		}
-	});
-
-	return travel;
-};
-const Travel = async () => {
-   const result = await prisma.travelPlan.findMany({
-    where:{
-      isExpired:false
-    },
-    include:{
-      author:{
-        select: { id: true, email: true, fullName: true, name: true, isActive:true }
+  const travel = await prisma.travelPlan.findUnique({
+    where: { id },
+    include: {
+      author: {
+        select: { id: true, email: true, fullName: true, name: true }
       }
     }
-   })
-   return result
+  });
+
+  if (!travel) {
+    return null
+  }
+
+  return travel;
+};
+const Travel = async () => {
+  const result = await prisma.travelPlan.findMany({
+    where: {
+      isExpired: false
+    },
+    include: {
+      author: {
+        select: { id: true, email: true, fullName: true, name: true, isActive: true, profileImage:true }
+      }
+    }
+  })
+  return result
 };
 
 export const myTravel = async (userId: string) => {
   const travels = await prisma.travelPlan.findMany({
     where: {
-      authorId: userId, 
+      authorId: userId,
     },
     orderBy: {
       createdAt: "desc"
@@ -166,20 +175,20 @@ const updateTravel = async (id: string, userId: string, updateData: any) => {
     updateData.visibility = updateData.visibility === 'true';
   }
 
-const IsUpdatedData = {
-  title: updateData.title,
-  destination: updateData.destination,
-  startDate: new Date(updateData.startDate).toISOString(),
-  endDate: new Date(updateData.endDate).toISOString(),
-  travelType: updateData.travelType,
-  budgetRange: updateData.budgetRange,
-  visibility: updateData.visibility,
-};
+  const IsUpdatedData = {
+    title: updateData.title,
+    destination: updateData.destination,
+    startDate: new Date(updateData.startDate).toISOString(),
+    endDate: new Date(updateData.endDate).toISOString(),
+    travelType: updateData.travelType,
+    budgetRange: updateData.budgetRange,
+    visibility: updateData.visibility,
+  };
 
 
   const updatedTravel = await prisma.travelPlan.update({
     where: { id },
-    data: IsUpdatedData ,
+    data: IsUpdatedData,
     include: {
       author: {
         select: {
@@ -221,27 +230,27 @@ const deleteTravel = async (id: string, userId: string) => {
 
 const getAllTravels = async (query: Record<string, string>) => {
 
-	const queryBuilder = new QueryBuilder(prisma.travelPlan, query as any);
+  const queryBuilder = new QueryBuilder(prisma.travelPlan, query as any);
 
-	const builder = queryBuilder
-		.filter()
-		.search(travelSearchableFields)
-		.sort()
-		.fields()
-		.paginate();
+  const builder = queryBuilder
+    .filter()
+    .search(travelSearchableFields)
+    .sort()
+    .fields()
+    .paginate();
 
-	const [data, meta] = await Promise.all([
-		builder.build(),
-		queryBuilder.getMeta()
-	]);
+  const [data, meta] = await Promise.all([
+    builder.build(),
+    queryBuilder.getMeta()
+  ]);
 
-	return { data, meta };
+  return { data, meta };
 };
 
 export const TravelService = {
-	createTravel,
-	getTravelById,
-	getAllTravels,
+  createTravel,
+  getTravelById,
+  getAllTravels,
   updateTravel,
   deleteTravel,
   Travel,

@@ -12,8 +12,8 @@ import validateRequest from "../../middleware/validateRequest";
 const router = express.Router();
 
 router.post("/create-travel", checkAuth(Role.USER, Role.ADMIN),
- fileUploader('profileImage',5), validateRequest(TravelValidation.createTravelValidationSchema), TravelController.createTravel);
-router.get("/getAll", TravelController.getAll);
+ fileUploader('images',10), validateRequest(TravelValidation.createTravelValidationSchema), TravelController.createTravel);
+router.get("/getAll",checkAuth(Role.ADMIN), TravelController.getAll);
 router.get("/getTravel", TravelController.Travel);
 router.get("/myTravel",checkAuth(Role.USER), TravelController.myTravel);
 router.get("/:id", TravelController.getTravel);

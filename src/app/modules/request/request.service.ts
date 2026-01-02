@@ -1,31 +1,80 @@
 
 import prisma from "../../shared/prisma";
 import { QueryBuilder } from "../../shared/QueryBuilder";
-import { RequestStatus } from "@prisma/client";
+import { RequestStatus, TravelType } from "@prisma/client";
 
-const requestSearchableFields: string[] = ["status"];
+const requestSearchableFields: string[] = ["status","email","name"];
 
-const createRequest = async (payload: { travelPlanId: string }, userId: string) => {
 
-  const existing = await prisma.request.findFirst({
-    where: {
-      userId: userId,
-      travelPlanId: payload.travelPlanId
+
+
+
+const MAX_REQUESTS_PER_PLAN = 10;
+
+export const createRequest = async (
+  payload: { travelPlanId: string },
+  userId: string
+) => {
+  return prisma.$transaction(async (tx) => {
+
+    const travelPlan = await tx.travelPlan.findUnique({
+      where: { id: payload.travelPlanId },
+      select: { id: true, travelType: true },
+    });
+
+    if (!travelPlan) {
+      throw new Error("Travel plan not found.");
     }
-  });
 
-  if (existing) {
-    throw new Error("You have already requested to join this travel plan.");
-  }
-
-  return prisma.request.create({
-    data: {
-      userId,
-      travelPlanId: payload.travelPlanId,
-      status: RequestStatus.PENDING
+    if (travelPlan.travelType === TravelType.SOLO) {
+      throw new Error("You cannot request to join a solo travel plan.");
     }
+
+    const existing = await tx.request.findFirst({
+      where: {
+        userId,
+        travelPlanId: payload.travelPlanId,
+      },
+    });
+
+    if (existing) {
+      throw new Error(
+        "You have already requested to join this travel plan."
+      );
+    }
+
+
+    const totalRequests = await tx.request.count({
+      where: {
+        travelPlanId: payload.travelPlanId,
+      },
+    });
+
+
+    if (totalRequests >= MAX_REQUESTS_PER_PLAN) {
+      const oldest = await tx.request.findFirst({
+        where: { travelPlanId: payload.travelPlanId },
+        orderBy: { createdAt: "asc" },
+        select: { id: true },
+      });
+
+      if (oldest) {
+        await tx.request.delete({ where: { id: oldest.id } });
+      }
+    }
+
+    const newRequest = await tx.request.create({
+      data: {
+        userId,
+        travelPlanId: payload.travelPlanId,
+        status: RequestStatus.PENDING,
+      },
+    });
+
+    return newRequest;
   });
 };
+
 
 
 const getRequestById = async (id: string) => {
@@ -41,13 +90,26 @@ const getRequestById = async (id: string) => {
 };
 
 
-const getAllRequests = async (query: Record<string, string>) => {
+
+
+export const getAllRequests = async (query: Record<string, string>) => {
   const qb = new QueryBuilder(prisma.request, query as any);
-  const builder = qb.filter().search(requestSearchableFields).sort().fields().paginate();
-  const [data, meta] = await Promise.all([builder.build(), qb.getMeta()]);
+
+  qb.filter()
+    .search(requestSearchableFields)
+    .sort()
+    .fields()
+    .paginate()
+    .relation({
+      user: { select: { id: true, name: true, email: true, profileImage: true } },
+      travelPlan: { select: { id: true, title: true, travelType: true } },
+    });
+
+  const [data, meta] = await Promise.all([qb.build(), qb.getMeta()]);
 
   return { data, meta };
 };
+
 
 
 

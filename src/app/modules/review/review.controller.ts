@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { ReviewService } from "./review.service";
+import AppError from "../../error/AppError";
 
 const addReview = catchAsync(async (req: Request, res: Response) => {
   const authorId = req.user.id;
@@ -26,7 +27,7 @@ const addReview = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getReviewsByTravelId = catchAsync(async (req: Request, res: Response) => {
-  const travelId = req.params.travelId;
+  const travelId = req.params.targetId;
   const reviews = await ReviewService.getReviewsByTravelId(travelId);
 
   sendResponse(res, {
@@ -36,6 +37,22 @@ const getReviewsByTravelId = catchAsync(async (req: Request, res: Response) => {
     data: reviews,
   });
 });
+
+const individualReview = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user?.id) {
+    throw new AppError(401, "Unauthorized");
+  }
+
+  const reviews = await ReviewService.individualReview(req.user.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Received reviews fetched successfully",
+    data: reviews,
+  });
+});
+
 
 const getReviewById = catchAsync(async (req: Request, res: Response) => {
   const reviewId = req.params.reviewId;
@@ -65,4 +82,5 @@ export const ReviewController = {
   getReviewsByTravelId,
   getReviewById,
   getAllReviews,
+  individualReview
 };
