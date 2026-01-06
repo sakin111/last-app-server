@@ -11,7 +11,6 @@ export interface interConfig {
     JWT_REFRESH_SECRET: string
     JWT_ACCESS_EXPIRE: string
     JWT_REFRESH_EXPIRE: string
-    RESET_PASS_LINK: string
     ADMIN_EMAIL:string,
     ADMIN_PASS:string,
     CLOUDINARY_API_CLOUD: string,
@@ -22,7 +21,7 @@ export interface interConfig {
 }
 
 const envProvider = (): interConfig => {
-    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV','JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE','JWT_REFRESH_EXPIRE','RESET_PASS_LINK','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY','FRONTEND_URL']
+    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV','JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE','JWT_REFRESH_EXPIRE','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY','FRONTEND_URL']
     configKey.forEach((key) => {
         if (!process.env[key]) {
             throw new Error(`Missing environment variable: ${key}`);
@@ -38,7 +37,6 @@ const envProvider = (): interConfig => {
     JWT_SALT: process.env.JWT_SALT  as string,
     JWT_ACCESS_EXPIRE:process.env.JWT_ACCESS_EXPIRE as string,
     JWT_REFRESH_EXPIRE: process.env.JWT_REFRESH_EXPIRE as string,
-    RESET_PASS_LINK:process.env.RESET_PASS_LINK as string,
     ADMIN_EMAIL:process.env.ADMIN_EMAIL as string,
     ADMIN_PASS:process.env.ADMIN_PASS as string,
     CLOUDINARY_API_CLOUD: process.env.CLOUDINARY_API_CLOUD as string,
