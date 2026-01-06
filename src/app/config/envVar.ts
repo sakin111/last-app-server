@@ -17,11 +17,12 @@ export interface interConfig {
     CLOUDINARY_API_KEY: string,
     CLOUDINARY_API_SECRET: string,
     STRIPE_SECRET_KEY: string,
-    FRONTEND_URL:string
+    FRONTEND_URL:string,
+    STRIPE_WEBHOOK_SECRET:string
 }
 
 const envProvider = (): interConfig => {
-    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV','JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE','JWT_REFRESH_EXPIRE','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY','FRONTEND_URL']
+    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV','JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE','JWT_REFRESH_EXPIRE','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD','CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY','FRONTEND_URL','STRIPE_WEBHOOK_SECRET']
     configKey.forEach((key) => {
         if (!process.env[key]) {
             throw new Error(`Missing environment variable: ${key}`);
@@ -43,7 +44,8 @@ const envProvider = (): interConfig => {
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
-    FRONTEND_URL: process.env.FRONTEND_URL as string
+    FRONTEND_URL: process.env.FRONTEND_URL as string,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET as string
     }
 
 }
