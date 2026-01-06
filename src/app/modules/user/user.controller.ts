@@ -141,6 +141,17 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const AllUserCount = catchAsync(async (req: Request, res: Response) => {
+
+  const result = await prisma.user.count()
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "user Deleted successfully",
+    data: result
+  });
+});
+
 
 export const UserController = {
  createUser,
@@ -151,5 +162,6 @@ export const UserController = {
  updatedUser,
  updateProfileImage,
  deleteUser,
- PublicProfile
+ PublicProfile,
+ AllUserCount
 }

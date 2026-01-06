@@ -8,7 +8,6 @@ const stripe = new Stripe(envVar.STRIPE_SECRET_KEY as string, {
 });
 
 
-
 export const createCheckoutSession = async (params: {
   stripePriceId: string;
   successUrl: string;
@@ -35,25 +34,24 @@ export const createCheckoutSession = async (params: {
 };
 
 
-
-export const verifyWebhookSignature = (
+export const verifyWebhookSignature = async (
   body: Buffer,
   signature: string,
   secret: string
-): Stripe.Event => {
-  return stripe.webhooks.constructEvent(body, signature, secret);
+): Promise<Stripe.Event> => {
+  return await stripe.webhooks.constructEventAsync(body, signature, secret);
 };
-
 
 
 export const handleCheckoutSessionCompleted = async (
   session: Stripe.Checkout.Session
 ) => {
   const metadata = session.metadata as { subscriptionId?: string };
-
+     console.log("Subscription ID:", metadata.subscriptionId);
   if (!metadata?.subscriptionId) {
     throw new Error("Missing subscriptionId in session metadata");
   }
+
 
   await prisma.subscription.update({
     where: { id: metadata.subscriptionId },
@@ -61,54 +59,54 @@ export const handleCheckoutSessionCompleted = async (
       active: true,
       paymentStatus: PaymentStatus.COMPLETED,
       stripeSubscriptionId: session.subscription as string,
-      stripeCustomerId: session.customer as string, 
+      stripeCustomerId: session.customer as string,
+    },
+    
+  });
+
+
+  await prisma.payment.upsert({
+    where: { subscriptionId: metadata.subscriptionId },
+    update: { status: PaymentStatus.COMPLETED },
+    create: {
+      subscriptionId: metadata.subscriptionId,
+      amount: parseFloat(session.amount_total as any) / 100 || 0, 
+      currency: session.currency || "usd",
+      status: PaymentStatus.COMPLETED,
+    },
+  });
+ console.log("✅ SUBSCRIPTION UPDATED");
+
+  return { success: true };
+};
+
+
+export const handleCheckoutCancel = async (sessionId: string) => {
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  const metadata = session.metadata as { subscriptionId?: string };
+
+  if (!metadata?.subscriptionId) throw new Error("Missing subscriptionId");
+
+  await prisma.subscription.update({
+    where: { id: metadata.subscriptionId },
+    data: { 
+      active: false, 
+      paymentStatus: PaymentStatus.FAILED,
     },
   });
 
-  await prisma.payment.updateMany({
-    where: {
+  await prisma.payment.upsert({
+    where: { subscriptionId: metadata.subscriptionId },
+    update: { status: PaymentStatus.FAILED },
+    create: {
       subscriptionId: metadata.subscriptionId,
-    },
-    data: {
-      status: PaymentStatus.COMPLETED,
+      amount: parseFloat(session.amount_total as any) / 100 || 0,
+      currency: session.currency || "usd",
+      status: PaymentStatus.FAILED,
     },
   });
 
   return { success: true };
-
-
 };
-
-
-
-export const handleCheckoutSuccess = async (sessionId: string) => {
-  const session = await stripe.checkout.sessions.retrieve(sessionId);
-  return handleCheckoutSessionCompleted(session);
-};
-
-export const handleCheckoutCancel = async (sessionId: string) => {
-  try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-    const metadata = session.metadata as { subscriptionId?: string };
-    
-    if (!metadata?.subscriptionId) {
-      throw new Error("Missing subscriptionId");
-    }
-
-    await prisma.subscription.update({
-      where: { id: metadata.subscriptionId },
-      data: { 
-        active: false, 
-        paymentStatus: PaymentStatus.FAILED 
-      },
-    });
-    
-    return { success: true };
-  } catch (error) {
-    console.error("Error handling checkout cancel:", error);
-    throw error;
-  }
-};
-
 
 export default stripe;

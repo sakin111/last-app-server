@@ -43,7 +43,11 @@ const individualReview = catchAsync(async (req: Request, res: Response) => {
     throw new AppError(401, "Unauthorized");
   }
 
-  const reviews = await ReviewService.individualReview(req.user.id);
+  const page = req.query.page ? Number(req.query.page) : 1;
+  const limit = req.query.limit ? Number(req.query.limit) : 10;
+
+  const reviews = await ReviewService.individualReview(req.user.id, page, limit);
+
 
   sendResponse(res, {
     statusCode: 200,
@@ -68,6 +72,7 @@ const getReviewById = catchAsync(async (req: Request, res: Response) => {
 
 const getAllReviews = catchAsync(async (_req: Request, res: Response) => {
   const reviews = await ReviewService.getAllReviews();
+  console.log(reviews);
 
   sendResponse(res, {
     statusCode: 200,

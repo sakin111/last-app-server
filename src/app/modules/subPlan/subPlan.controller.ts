@@ -44,10 +44,32 @@ const createPlanController = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+ const getMyPlan = catchAsync(async (_req: Request, res: Response) => {
+  const userId = _req.user?.id;
+  const result = await planService.getMySubscription(userId);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Plans retrieved successfully",
+    data: result,
+  });
+});
+ const getTotalActiveSubscribers = catchAsync(async (_req: Request, res: Response) => {
+  const result = await planService.getTotalActiveSubscribers();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Plans retrieved successfully",
+    data: result,
+  });
+});
+
 
 export const planController = {
     createPlanController,
     updatePlanController,
     deletePlanController,
-    getAllPlansController
+    getAllPlansController,
+    getMyPlan,
+    getTotalActiveSubscribers
 }

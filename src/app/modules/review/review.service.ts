@@ -1,5 +1,6 @@
 import AppError from "../../error/AppError";
 import prisma from "../../shared/prisma";
+import { QueryBuilder } from "../../shared/QueryBuilder";
 
 
 
@@ -44,25 +45,61 @@ const getReviewById = async (reviewId: string) => {
 };
 
 const getAllReviews = async () => {
-  return prisma.review.findMany({
+  const result = await prisma.review.findMany({
     include: { author: {select:{id:true,name:true,email:true,bio:true}}, target: true },
     orderBy: { createdAt: "desc" },
   });
+  console.log(result,"service result");
+  return result;
 };
 
-const individualReview = async (userId: string) => {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      reviewsReceived: true,
+const individualReview = async (
+  userId: string,
+  page = 1,
+  limit = 10
+) => {
+  const skip = (page - 1) * limit;
+
+  const [reviews, total, avg] = await prisma.$transaction([
+    prisma.review.findMany({
+      where: { targetId: userId },
+      skip,
+      take: limit,
+      orderBy: { createdAt: "desc" },
+      include: {
+        author: {
+          select: {
+            id: true,
+            fullName: true,
+            profileImage: true,
+          },
+        },
+      },
+    }),
+
+    prisma.review.count({
+      where: { targetId: userId },
+    }),
+
+    prisma.review.aggregate({
+      where: { targetId: userId },
+      _avg: { rating: true },
+    }),
+  ]);
+
+  return {
+    reviews,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+      averageRating: avg._avg.rating ?? 0,
     },
-  });
-
-  if (!user) {
-    throw new AppError(404, "User not found");
-  }
-  return user.reviewsReceived;
+  };
 };
+
+
 
 
 

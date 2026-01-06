@@ -1,4 +1,4 @@
-import { Plan } from "@prisma/client";
+import { PaymentStatus, Plan } from "@prisma/client";
 import prisma from "../../shared/prisma";
 
  const createPlan = async (payload: {
@@ -36,9 +36,50 @@ import prisma from "../../shared/prisma";
   return result
 };
 
+
+const getMySubscription = async (userId: string) => {
+  const subscription = await prisma.subscription.findUnique({
+    where: { userId },
+    include: {
+      plan: true,
+    },
+  });
+
+  if (!subscription) {
+    return {
+      isSubscribed: false,
+      subscription: null,
+    };
+  }
+
+  const isActive =
+    subscription.active &&
+    subscription.endDate > new Date() &&
+    subscription.paymentStatus === PaymentStatus.COMPLETED
+
+  return {
+    isSubscribed: isActive,
+    subscription,
+  };
+};
+
+
+const getTotalActiveSubscribers = async () => {
+  return prisma.subscription.count({
+    where: {
+      active: true,
+      endDate: { gt: new Date() },
+      paymentStatus: PaymentStatus.COMPLETED,
+    },
+  });
+};
+  
+
 export const planService = {
     createPlan,
     updatePlan,
     deletePlan,
-    getAllPlans
+    getAllPlans,
+    getMySubscription,
+    getTotalActiveSubscribers
 }

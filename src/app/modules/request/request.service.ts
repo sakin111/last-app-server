@@ -120,7 +120,7 @@ const getRequestsForMyPlans = async (ownerId: string) => {
       travelPlan: { authorId: ownerId }
     },
     include: {
-      user: { select: { id: true, fullName: true, email: true } },
+      user: { select: { id: true, fullName: true, email: true , profileImage:true} },
       travelPlan: { select: { id: true, title: true } }
     },
     orderBy: { createdAt: "desc" }

@@ -6,7 +6,7 @@ import { Role } from "@prisma/client";
 const router = express.Router();
 
 
-router.get("/success", PaymentController.checkoutSuccess);
+
 router.get("/cancel", PaymentController.checkoutCancel);
 
 

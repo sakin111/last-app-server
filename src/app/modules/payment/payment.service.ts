@@ -4,7 +4,7 @@ import stripe, {
   createCheckoutSession, 
   handleCheckoutCancel, 
   handleCheckoutSessionCompleted, 
-  handleCheckoutSuccess,
+
 } from "../../shared/stripe";
 
 
@@ -138,7 +138,6 @@ export const PaymentService = {
   getActiveSubscription,           
   hasActiveSubscription,            
   handleCheckoutSessionCompleted,
-  handleCheckoutSuccess,
   handleCheckoutCancel,
    
 }  

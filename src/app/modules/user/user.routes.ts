@@ -17,33 +17,36 @@ router.post(
     "/create-user",
     validateRequest(UserValidation.createUserValidationSchema),
     UserController.createUser
-),
+);
 router.patch(
     "/update-profileImage",checkAuth(Role.ADMIN, Role.USER),
     fileUploader('profileImage', 1),
     UserController.updateProfileImage
-),
+);
 
 router.get(
     "/me",
      checkAuth(Role.ADMIN, Role.USER),
      UserController.getMyProfile
-),
+);
 router.get(
     "/profile/public/:id",
      UserController.PublicProfile
-),
+);
 
 router.get(
     "/notifications",
      checkAuth(Role.USER),
      UserController.getMyNotifications
-),
+);
 
 
 router.get(
-    "/allUser",checkAuth(Role.ADMIN,Role.USER), UserController.AllUser
-)
+    "/allUser",checkAuth(Role.ADMIN), UserController.AllUser
+);
+router.get(
+    "/allUserCount",checkAuth(Role.ADMIN), UserController.AllUserCount
+);
 
 router.patch(
     '/:id/status',

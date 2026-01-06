@@ -65,7 +65,8 @@ const PublicProfile = async (id: string) => {
       travelInterests: true,
       visitedCountries: true,
       reviewsReceived: { select: { rating: true } },
-    },
+      subscription: { select: { paymentStatus: true } }
+    }
   });
 
   if (!user) return null;

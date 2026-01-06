@@ -51,7 +51,7 @@ const refreshToken = async (token: string) => {
         decodedData = verifyTokens(token, envVar.JWT_REFRESH_SECRET as string) as any;
     }
     catch (err) {
-        throw new Error("You are not authorized!")
+        throw new AppError(401, "You are not authorized!")
     }
 
     const userData = await prisma.user.findUnique({

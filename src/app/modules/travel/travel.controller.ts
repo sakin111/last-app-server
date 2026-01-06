@@ -3,6 +3,7 @@ import catchAsync from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { TravelService } from "./travel.service";
 import { getUploadedFiles } from "../../shared/fileUploader";
+import { QueryParser } from "../../shared/QueryParser";
 
 const createTravel = catchAsync(async (req: Request, res: Response) => {
 	 const id = req.user?.id
@@ -71,14 +72,15 @@ const deleteTravel = catchAsync(async (req: Request, res: Response) => {
 });
 
 const Travel = catchAsync(async (req: Request, res: Response) => {
-
-  const result = await TravelService.Travel()
+ const queryParams = QueryParser.toStringRecord(req.query);
+  const result = await TravelService.Travel(queryParams);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'Travel retrieved successfully',
-    data: result
+    meta: result.meta,
+    data: result.data
   });
 });
 
@@ -95,7 +97,17 @@ const myTravel = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const checkSubscription = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user?.id as string;
+  const result = await TravelService.checkSubscriptionStatus(userId);
 
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Subscription status retrieved',
+    data: result
+  });
+});
 
 export const TravelController = {
 	createTravel,
@@ -104,7 +116,8 @@ export const TravelController = {
 	updateTravel,
 	deleteTravel,
 	Travel,
-	myTravel
+	myTravel,
+	checkSubscription
 
 };
 

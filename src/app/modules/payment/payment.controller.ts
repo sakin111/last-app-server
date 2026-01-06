@@ -45,19 +45,19 @@ const checkoutSession = catchAsync(async (req: Request, res: Response) => {
 });
 
 
-const checkoutSuccess = catchAsync(async (req: Request, res: Response) => {
-  const { session_id } = req.query as { session_id: string };
+// const checkoutSuccess = catchAsync(async (req: Request, res: Response) => {
+//   const { session_id } = req.query as { session_id: string };
 
 
-  const result = await PaymentService.handleCheckoutSuccess(session_id);
+//   const result = await PaymentService.handleCheckoutSuccess(session_id);
 
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Payment successful, subscription activated",
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: 200,
+//     success: true,
+//     message: "Payment successful, subscription activated",
+//     data: result,
+//   });
+// });
 
 
 const checkoutCancel = catchAsync(async (req: Request, res: Response) => {
@@ -142,7 +142,7 @@ const cancelMySubscription = catchAsync(async (req: Request, res: Response) => {
 export const PaymentController = {
 
   checkoutSession,
-  checkoutSuccess,
+  // checkoutSuccess,
   checkoutCancel,
   getSubscriptions,
   getMySubscription,

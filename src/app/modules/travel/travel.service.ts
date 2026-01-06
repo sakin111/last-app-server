@@ -8,7 +8,7 @@ import cron from "node-cron"
 
 
 
-const travelSearchableFields = ["title", "destination", "description"];
+const travelSearchableFields = ["title", "destination","description"];
 
 const createTravel = async (
   payload: any,
@@ -17,6 +17,14 @@ const createTravel = async (
 ) => {
   if (!authorId) {
     throw new Error("authorId is required");
+  }
+
+  const subscription = await prisma.subscription.findUnique({
+    where: { userId: authorId }
+  });
+
+  if (!subscription || !subscription.active || subscription.paymentStatus !== 'COMPLETED') {
+    throw new AppError(403, 'You must have an active subscription with completed payment to create a travel plan');
   }
 
 if (!files || files.length === 0) {
@@ -128,18 +136,36 @@ const getTravelById = async (id: string) => {
 
   return travel;
 };
-const Travel = async () => {
-  const result = await prisma.travelPlan.findMany({
-    where: {
-      isExpired: false
-    },
-    include: {
+const Travel = async (query: Record<string, string>) => {
+  const queryBuilder = new QueryBuilder(prisma.travelPlan, query as any);
+
+  const builder = queryBuilder
+    .filter()
+    .search(travelSearchableFields)
+    .sort()
+    .fields()
+    .relation({
       author: {
-        select: { id: true, email: true, fullName: true, name: true, isActive: true, profileImage:true }
+        select: { 
+          id: true, 
+          email: true, 
+          fullName: true, 
+          name: true, 
+          isActive: true,
+          profileImage: true
+        }
       }
-    }
-  })
-  return result
+    })
+    .addWhere({ isExpired: false })
+    .paginate();
+
+        const [data, meta] = await Promise.all([
+        builder.build(),
+        queryBuilder.getMeta()
+    ]);
+
+
+  return { data, meta };
 };
 
 export const myTravel = async (userId: string) => {
@@ -247,6 +273,24 @@ const getAllTravels = async (query: Record<string, string>) => {
   return { data, meta };
 };
 
+export const checkSubscriptionStatus = async (userId: string) => {
+  const subscription = await prisma.subscription.findUnique({
+    where: { userId },
+    select: {
+      id: true,
+      active: true,
+      paymentStatus: true,
+      endDate: true
+    }
+  });
+
+
+  return {
+    hasActiveSubscription: subscription?.active && subscription?.paymentStatus === 'COMPLETED',
+    subscription
+  };
+};
+
 export const TravelService = {
   createTravel,
   getTravelById,
@@ -254,6 +298,7 @@ export const TravelService = {
   updateTravel,
   deleteTravel,
   Travel,
-  myTravel
+  myTravel,
+  checkSubscriptionStatus
 };
 
