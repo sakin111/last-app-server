@@ -33,6 +33,9 @@ import prisma from "../../shared/prisma";
 
  const getAllPlans = async () => {
   const result = await prisma.plan.findMany();
+  if(!result){
+    return []
+  }
   return result
 };
 
