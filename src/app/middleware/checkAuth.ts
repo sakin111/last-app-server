@@ -14,8 +14,13 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
     const accessToken = req.cookies.accessToken;
 
     if (!accessToken) {
-      throw new AppError(403, "No Token provided");
-    }
+  console.error("Access token missing. Cookies received:", req.cookies);
+  throw new AppError(
+    403,
+    "No Token provided. Make sure the request includes credentials and the cookie is set correctly."
+  );
+}
+
 
     let verifiedToken: JwtPayload;
     try {
