@@ -16,13 +16,15 @@ const login = catchAsync(async (req: Request, res: Response) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 1000 * 60 * 60 * 24
+        maxAge: 1000 * 60 * 60 * 24,
+        path:"/"
     })
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 1000 * 60 * 60 * 24 * 90
+        maxAge: 1000 * 60 * 60 * 24 * 90,
+        path:"/"
     })
     sendResponse(res, {
         statusCode: 200,
@@ -42,6 +44,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
         secure: true,
         sameSite: "none",
         maxAge: 1000 * 60 * 60 * 24,
+        path:"/"
     });
 
     sendResponse(res, {
@@ -93,13 +96,15 @@ const logout = catchAsync(async (req: Request, res: Response) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 1000 * 60 * 60 * 24
+        maxAge: 1000 * 60 * 60 * 24,
+        path:"/"
     })
     res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 1000 * 60 * 60 * 24 * 90
+        maxAge: 1000 * 60 * 60 * 24 * 90,
+        path:"/"
     })
 
     sendResponse(res, {

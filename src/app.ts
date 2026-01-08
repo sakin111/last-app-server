@@ -9,7 +9,7 @@ import { WebhookController } from "./app/modules/payment/webhook.controller";
 
 export const app: Application = express();
 
-
+app.set("trust proxy", 1);
 app.use(cors({
   origin: envVar.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
