@@ -19,4 +19,4 @@ router.get("/allSub", checkAuth(Role.ADMIN),planController.getTotalActiveSubscri
 router.patch("/:id",checkAuth(Role.ADMIN) ,planController.updatePlanController);
 router.delete("/:id",checkAuth(Role.ADMIN) ,planController.deletePlanController);
 
-export const SubPlan = router;
+export const subPlan = router;
