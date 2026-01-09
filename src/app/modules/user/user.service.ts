@@ -134,7 +134,7 @@ export const getAllFromDB = async (query: any) => {
 
   const filterConditions: Prisma.UserWhereInput = {
     ...(role && { role }),
-    ...(isActive !== undefined && { isActive: isActive === "true" }),
+    ...(isActive !== undefined && { isActive: isActive === true }),
   };
 
   const andConditions = [...searchConditions];
@@ -147,7 +147,7 @@ const where: Prisma.UserWhereInput =
   andConditions.length > 0 ? { AND: andConditions } : {};
 
   const users = await prisma.user.findMany({
-    where,
+    where :{},
     skip,
     take: Number(limit),
     orderBy: {
