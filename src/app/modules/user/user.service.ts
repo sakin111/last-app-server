@@ -111,7 +111,7 @@ const getAllFromDB = async (query: Record<string, string>) => {
   const queryBuilder = new QueryBuilder(prisma.user, filterQuery);
 
   const usersData = queryBuilder
-    .filter(userFilterableFields)
+    .filter()
     .search(userSearchableFields)
     .sort()
     .fields()
