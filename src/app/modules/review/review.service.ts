@@ -49,7 +49,6 @@ const getAllReviews = async () => {
     include: { author: {select:{id:true,name:true,email:true,bio:true}}, target: true },
     orderBy: { createdAt: "desc" },
   });
-  console.log(result,"service result");
   return result;
 };
 
