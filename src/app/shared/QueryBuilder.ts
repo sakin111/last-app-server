@@ -236,24 +236,36 @@ sort(defaultSort?: string): this {
 async build() {
   const options: any = {};
 
-  if (this.where.AND?.length) {
- 
-    const filteredAND = this.where.AND.filter((cond: {}) => Object.keys(cond).length > 0);
-    options.where = filteredAND.length > 0 ? { AND: filteredAND } : {};
-  } else {
-    options.where = {};
+
+  if (this.where?.AND?.length) {
+    const filteredAND = this.where.AND.filter(
+      (cond: any) => cond && Object.keys(cond).length > 0
+    );
+    if (filteredAND.length > 0) {
+      options.where = { AND: filteredAND };
+    }
   }
 
-  if (this.orderBy.length > 0) options.orderBy = this.orderBy;
-  if (this.select && Object.keys(this.select).length > 0) options.select = this.select;
-  if (this.include && Object.keys(this.include).length > 0) options.include = this.include;
+ 
+  if (this.orderBy.length > 0) {
+    options.orderBy = this.orderBy;
+  }
+
+
+  if (this.select && Object.keys(this.select).length > 0) {
+    options.select = this.select;
+  }
+
+
   if (this.take !== undefined) options.take = this.take;
   if (this.skip !== undefined) options.skip = this.skip;
+
 
   console.log("FINAL PRISMA OPTIONS:", JSON.stringify(options, null, 2));
 
   return await this.model.findMany(options);
 }
+
 
 
 
