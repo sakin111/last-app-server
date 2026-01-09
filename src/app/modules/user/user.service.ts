@@ -118,49 +118,35 @@ export const getAllFromDB = async (query: any) => {
 
   const skip = (Number(page) - 1) * Number(limit);
 
-  // 🔹 Log input query
   console.log("=== QUERY PARAMS ===");
   console.log(JSON.stringify(query, null, 2));
-  console.log("page:", page, "limit:", limit, "skip:", skip);
-  console.log("sortBy:", sortBy, "sortOrder:", sortOrder);
 
-  // 🔹 Build search conditions
-  const searchConditions: Prisma.UserWhereInput[] = search
-    ? [
-        {
-          OR: [
-            { name: { contains: search, mode: "insensitive" } },
-            { email: { contains: search, mode: "insensitive" } },
-            { fullName: { contains: search, mode: "insensitive" } },
-          ],
-        },
-      ]
-    : [];
+  // 🔹 Build WHERE clause
+  const where: Prisma.UserWhereInput = {};
 
-  console.log("searchConditions:", JSON.stringify(searchConditions, null, 2));
-
-  // 🔹 Build filter conditions
-  const filterConditions: Prisma.UserWhereInput = {
-    ...(role && { role }),
-    ...(isActive !== undefined && { isActive: isActive === "true" || isActive === true }),
-  };
-
-  console.log("filterConditions:", JSON.stringify(filterConditions, null, 2));
-
-  // 🔹 Combine conditions
-  const andConditions = [...searchConditions];
-  if (Object.keys(filterConditions).length > 0) {
-    andConditions.push(filterConditions);
+  // Add search conditions
+  if (search) {
+    where.OR = [
+      { name: { contains: search, mode: "insensitive" } },
+      { email: { contains: search, mode: "insensitive" } },
+      { fullName: { contains: search, mode: "insensitive" } },
+    ];
   }
 
-  const where: Prisma.UserWhereInput =
-    andConditions.length > 0 ? { AND: andConditions } : {};
+  // Add filters directly to where
+  if (role) {
+    where.role = role;
+  }
+
+  if (isActive !== undefined) {
+    where.isActive = isActive === "true" || isActive === true;
+  }
 
   console.log("CONSTRUCTED WHERE:", JSON.stringify(where, null, 2));
 
   // 🔹 Fetch users
   const users = await prisma.user.findMany({
-    where,           // ✅ use the correct where here
+    where,
     skip,
     take: Number(limit),
     orderBy: {
@@ -169,9 +155,6 @@ export const getAllFromDB = async (query: any) => {
   });
 
   console.log("FETCHED USERS COUNT:", users.length);
-  if (users.length > 0) {
-    console.log("First user:", users[0]);
-  }
 
   // 🔹 Total count
   const total = await prisma.user.count({ where });
