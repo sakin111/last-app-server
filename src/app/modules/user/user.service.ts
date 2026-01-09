@@ -106,27 +106,26 @@ const PublicProfile = async (id: string) => {
 
 const getAllFromDB = async (query: Record<string, string>) => {
 
+  const { page, limit, sortBy, sortOrder, ...filterQuery } = query;
 
-    const queryBuilder = new QueryBuilder(prisma.user, query);
+  const queryBuilder = new QueryBuilder(prisma.user, filterQuery);
 
-    const usersData = queryBuilder
-        .filter(userFilterableFields)
-        .search(userSearchableFields)
-        .sort()
-        .fields()
-        .relation()
-        .paginate();
+  const usersData = queryBuilder
+    .filter(userFilterableFields)
+    .search(userSearchableFields)
+    .sort()
+    .fields()
+    .relation()
+    .paginate();
 
-    const [data, meta] = await Promise.all([
-        usersData.build(),
-        queryBuilder.getMeta()
-    ]);
+  const [data, meta] = await Promise.all([
+    usersData.build(),
+    queryBuilder.getMeta()
+  ]);
 
-    return {
-        data,
-        meta
-    };
+  return { data, meta };
 };
+
 
 const changeProfileStatus = async (
     id: string,
