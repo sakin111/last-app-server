@@ -105,77 +105,71 @@ const PublicProfile = async (id: string) => {
 
 
 
-export const getAllFromDB = async (query: any) => {
-  const {
-    page = 1,
-    limit = 10,
-    search,
-    sortBy = "createdAt",
-    sortOrder = "desc",
-    role,
-    isActive,
-  } = query;
+// export const getAllFromDB = async (query: any) => {
+//   const {
+//     page = 1,
+//     limit = 10,
+//     search,
+//     sortBy = "createdAt",
+//     sortOrder = "desc",
+//     role,
+//     isActive,
+//   } = query;
 
-  const skip = (Number(page) - 1) * Number(limit);
+//   const skip = (Number(page) - 1) * Number(limit);
 
-  console.log("=== QUERY PARAMS ===");
-  console.log(JSON.stringify(query, null, 2));
+//   const where: Prisma.UserWhereInput = {};
 
-  // 🔹 Build WHERE clause
-  const where: Prisma.UserWhereInput = {};
+//   if (search) {
+//     where.OR = [
+//       { name: { contains: search, mode: "insensitive" } },
+//       { email: { contains: search, mode: "insensitive" } },
+//       { fullName: { contains: search, mode: "insensitive" } },
+//     ];
+//   }
 
-  // Add search conditions
-  if (search) {
-    where.OR = [
-      { name: { contains: search, mode: "insensitive" } },
-      { email: { contains: search, mode: "insensitive" } },
-      { fullName: { contains: search, mode: "insensitive" } },
-    ];
-  }
+//   if (role) where.role = role;
+//   if (isActive !== undefined) {
+//     where.isActive = isActive === "true" || isActive === true;
+//   }
 
-  // Add filters directly to where
-  if (role) {
-    where.role = role;
-  }
+//   // 🔹 FIX: Try without orderBy first to isolate the issue
+//   const users = await prisma.user.findMany({
+//     where,
+//     skip,
+//     take: Number(limit),
+//     // orderBy: { [sortBy]: sortOrder }, // ❌ COMMENT THIS OUT TEMPORARILY
+//   });
 
-  if (isActive !== undefined) {
-    where.isActive = isActive === "true" || isActive === true;
-  }
+//   const total = await prisma.user.count({ where });
 
-  console.log("CONSTRUCTED WHERE:", JSON.stringify(where, null, 2));
+//   return {
+//     data: users,
+//     meta: {
+//       page: Number(page),
+//       limit: Number(limit),
+//       total,
+//       totalPage: Math.ceil(total / Number(limit)),
+//     },
+//   };
+// };
 
-  // 🔹 Fetch users
-  const users = await prisma.user.findMany({
-    where,
-    skip,
-    take: Number(limit),
-    orderBy: {
-      [sortBy]: sortOrder,
-    },
-  });
 
-  console.log("FETCHED USERS COUNT:", users.length);
 
-  // 🔹 Total count
-  const total = await prisma.user.count({ where });
-  console.log("TOTAL USERS MATCHING WHERE:", total);
+export const getAllFromDB = async () => {
+
+  const users = await prisma.user.findMany();
 
   return {
     data: users,
     meta: {
-      page: Number(page),
-      limit: Number(limit),
-      total,
-      totalPage: Math.ceil(total / Number(limit)),
+      page: 1,
+      limit: users.length,
+      total: users.length,
+      totalPage: 1,
     },
   };
 };
-
-
-
-
-
-
 
 
 
