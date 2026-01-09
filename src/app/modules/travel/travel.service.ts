@@ -23,7 +23,7 @@ const createTravel = async (
     where: { userId: authorId }
   });
 
-  if (!subscription || !subscription.active || subscription.paymentStatus !== 'COMPLETED') {
+  if (!subscription || subscription.paymentStatus !== 'COMPLETED') {
     throw new AppError(403, 'You must have an active subscription with completed payment to create a travel plan');
   }
 
