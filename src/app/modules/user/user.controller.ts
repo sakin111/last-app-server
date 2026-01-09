@@ -26,6 +26,7 @@ const AllUser = catchAsync(async (req: Request, res: Response) => {
 
 const queryParams = QueryParser.toStringRecord(req.query);
   const result = await UserService.getAllFromDB(queryParams);
+  console.log(result,"alluser result");
 
   sendResponse(res, {
     statusCode: 200,
