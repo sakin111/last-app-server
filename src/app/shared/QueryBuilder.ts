@@ -16,20 +16,11 @@ export class QueryBuilder<M extends keyof PrismaClient> {
   }
 
 
- filter(excludeFields: string[] = []): this {
+filter(excludeFields: string[] = []): this {
   const filter: Record<string, any> = {};
 
   const systemFields = [
-    'page',
-    'limit',
-    'sort',
-    'sortBy',
-    'sortOrder',
-    'fields',
-    'include',
-    'searchTerm',
-    'startDate',
-    'endDate',
+    'page','limit','sort','sortBy','sortOrder','fields','include','searchTerm','startDate','endDate'
   ];
 
   const allExcludeFields = [...excludeFields, ...systemFields];
@@ -43,35 +34,28 @@ export class QueryBuilder<M extends keyof PrismaClient> {
     else filter[key] = value;
   });
 
+  // 🔹 Ensure AND array exists
+  if (!this.where.AND) this.where.AND = [];
 
-  if (Object.keys(filter).length > 0) {
-    if (!this.where.AND) this.where.AND = [];
-    this.where.AND.push(filter);
-  }
+  // Push filter if it has keys, otherwise push empty object
+  this.where.AND.push(Object.keys(filter).length ? filter : {});
 
   return this;
 }
 
 
 
-  search(searchableFields: string[]): this {
+search(searchableFields: string[]): this {
   const term = this.query.searchTerm;
-
   if (!term || !searchableFields.length) return this;
 
   const searchCondition = {
     OR: searchableFields.map(field => ({
-      [field]: {
-        contains: String(term),
-        mode: "insensitive",
-      },
-    })),
+      [field]: { contains: term, mode: "insensitive" }
+    }))
   };
 
-  if (!this.where.AND) {
-    this.where.AND = [];
-  }
-
+  if (!this.where.AND) this.where.AND = [];
   this.where.AND.push(searchCondition);
 
   return this;
@@ -249,28 +233,18 @@ sort(defaultSort?: string): this {
   }
 
 
- async build() {
-  if (!this.model) {
-    throw new Error('Model is null. Cannot execute query.');
-  }
-
+async build() {
   const options: any = {};
 
-  if (this.where.AND?.length) {
-    options.where = { AND: this.where.AND };
-  }
+  options.where = this.where.AND?.length ? { AND: this.where.AND } : {};
 
   if (this.orderBy.length > 0) options.orderBy = this.orderBy;
-  if (this.select && Object.keys(this.select).length > 0) {
-    options.select = this.select;
-  }
-  if (this.include && Object.keys(this.include).length > 0) {
-    options.include = this.include;
-  }
+  if (this.select && Object.keys(this.select).length > 0) options.select = this.select;
+  if (this.include && Object.keys(this.include).length > 0) options.include = this.include;
   if (this.take !== undefined) options.take = this.take;
   if (this.skip !== undefined) options.skip = this.skip;
 
-  console.log("FINAL PRISMA OPTIONS:", JSON.stringify(options, null, 2)); // Debug
+  console.log("FINAL PRISMA OPTIONS:", JSON.stringify(options, null, 2));
 
   return await this.model.findMany(options);
 }
