@@ -19,13 +19,6 @@ const createTravel = async (
     throw new Error("authorId is required");
   }
 
-  const subscription = await prisma.subscription.findUnique({
-    where: { userId: authorId }
-  });
-
-  if (!subscription || subscription.paymentStatus !== 'COMPLETED') {
-    throw new AppError(403, 'You must have an active subscription with completed payment to create a travel plan');
-  }
 
 if (!files || files.length === 0) {
     throw new Error("No file provided");
