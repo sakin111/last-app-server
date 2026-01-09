@@ -25,6 +25,10 @@ router.patch(
 );
 
 router.get(
+    "/allUser",checkAuth(Role.ADMIN), UserController.AllUser
+);
+
+router.get(
     "/me",
      checkAuth(Role.ADMIN, Role.USER),
      UserController.getMyProfile
@@ -41,9 +45,6 @@ router.get(
 );
 
 
-router.get(
-    "/allUser",checkAuth(Role.ADMIN), UserController.AllUser
-);
 router.get(
     "/allUserCount",checkAuth(Role.ADMIN), UserController.AllUserCount
 );
