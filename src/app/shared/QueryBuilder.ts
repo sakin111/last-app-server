@@ -34,11 +34,11 @@ filter(excludeFields: string[] = []): this {
     else filter[key] = value;
   });
 
-  // 🔹 Ensure AND array exists
-  if (!this.where.AND) this.where.AND = [];
-
-  // Push filter if it has keys, otherwise push empty object
-  this.where.AND.push(Object.keys(filter).length ? filter : {});
+ 
+  if (Object.keys(filter).length > 0) {
+    if (!this.where.AND) this.where.AND = [];
+    this.where.AND.push(filter);
+  }
 
   return this;
 }
@@ -236,7 +236,13 @@ sort(defaultSort?: string): this {
 async build() {
   const options: any = {};
 
-  options.where = this.where.AND?.length ? { AND: this.where.AND } : {};
+  if (this.where.AND?.length) {
+ 
+    const filteredAND = this.where.AND.filter((cond: {}) => Object.keys(cond).length > 0);
+    options.where = filteredAND.length > 0 ? { AND: filteredAND } : {};
+  } else {
+    options.where = {};
+  }
 
   if (this.orderBy.length > 0) options.orderBy = this.orderBy;
   if (this.select && Object.keys(this.select).length > 0) options.select = this.select;
