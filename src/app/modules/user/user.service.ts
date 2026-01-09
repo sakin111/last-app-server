@@ -4,7 +4,7 @@ import { QueryBuilder } from "../../shared/QueryBuilder";
 import bcrypt from "bcryptjs";
 import { userFilterableFields, userSearchableFields } from "./user.constant";
 import { JwtPayload } from "jsonwebtoken";
-import { Role, UserStatus } from "@prisma/client";
+import { Prisma, Role, UserStatus } from "@prisma/client";
 import prisma from "../../shared/prisma";
 import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
 
@@ -104,27 +104,77 @@ const PublicProfile = async (id: string) => {
 
 
 
-const getAllFromDB = async (query: Record<string, string>) => {
 
-  const { page, limit, sortBy, sortOrder, ...filterQuery } = query;
+export const getAllFromDB = async (query: any) => {
+  const {
+    page = 1,
+    limit = 10,
+    search,
+    sortBy = "createdAt",
+    sortOrder = "desc",
+    role,
+    isActive,
+  } = query;
 
-  const queryBuilder = new QueryBuilder(prisma.user, filterQuery);
+  const skip = (Number(page) - 1) * Number(limit);
 
-  const usersData = queryBuilder
-    .filter()
-    .search(userSearchableFields)
-    .sort()
-    .fields()
-    .relation()
-    .paginate();
 
-  const [data, meta] = await Promise.all([
-    usersData.build(),
-    queryBuilder.getMeta()
-  ]);
+  const searchConditions: Prisma.UserWhereInput[] = search
+    ? [
+        {
+          OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { email: { contains: search, mode: "insensitive" } },
+            { fullName: { contains: search, mode: "insensitive" } },
+          ],
+        },
+      ]
+    : [];
 
-  return { data, meta };
+
+  const filterConditions: Prisma.UserWhereInput = {
+    ...(role && { role }),
+    ...(isActive !== undefined && { isActive: isActive === "true" }),
+  };
+
+  const where: Prisma.UserWhereInput = {
+    AND: [...searchConditions, filterConditions],
+  };
+
+
+  const users = await prisma.user.findMany({
+    where,
+    skip,
+    take: Number(limit),
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
+    include: {
+      subscription: true,
+      admin: true,
+    },
+  });
+
+
+  const total = await prisma.user.count({ where });
+
+  return {
+    data: users,
+    meta: {
+      page: Number(page),
+      limit: Number(limit),
+      total,
+      totalPage: Math.ceil(total / Number(limit)),
+    },
+  };
 };
+
+
+
+
+
+
+
 
 
 const changeProfileStatus = async (
