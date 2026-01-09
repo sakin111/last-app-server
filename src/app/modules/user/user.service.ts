@@ -137,10 +137,14 @@ export const getAllFromDB = async (query: any) => {
     ...(isActive !== undefined && { isActive: isActive === "true" }),
   };
 
-  const where: Prisma.UserWhereInput = {
-    AND: [...searchConditions, filterConditions],
-  };
+  const andConditions = [...searchConditions];
 
+if (Object.keys(filterConditions).length > 0) {
+  andConditions.push(filterConditions);
+}
+
+const where: Prisma.UserWhereInput =
+  andConditions.length > 0 ? { AND: andConditions } : {};
 
   const users = await prisma.user.findMany({
     where,
@@ -148,10 +152,6 @@ export const getAllFromDB = async (query: any) => {
     take: Number(limit),
     orderBy: {
       [sortBy]: sortOrder,
-    },
-    include: {
-      subscription: true,
-      admin: true,
     },
   });
 
