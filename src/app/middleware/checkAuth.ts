@@ -11,9 +11,9 @@ import { UserStatus } from "@prisma/client"
 
 export const checkAuth = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const accessToken = req.cookies.accessToken;
+    const token = req.headers.authorization?.split(" ")[1] || req.cookies.accessToken;
 
-    if (!accessToken) {
+    if (!token) {
   console.error("Access token missing. Cookies received:", req.cookies);
   throw new AppError(
     403,
@@ -24,7 +24,7 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
 
     let verifiedToken: JwtPayload;
     try {
-      verifiedToken = verifyTokens(accessToken, envVar.JWT_ACCESS_SECRET) as JwtPayload;
+      verifiedToken = verifyTokens(token, envVar.JWT_ACCESS_SECRET) as JwtPayload;
     } catch (err: any) {
       if (err.name === "TokenExpiredError") {
         throw new AppError(401, "Access token expired");
