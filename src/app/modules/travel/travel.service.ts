@@ -1,7 +1,7 @@
 
 import { QueryBuilder } from "../../shared/QueryBuilder";
 import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
-import { TravelType } from "@prisma/client";
+import { PaymentStatus, TravelType } from "@prisma/client";
 import prisma from "../../shared/prisma";
 import AppError from "../../error/AppError";
 import cron from "node-cron"
@@ -15,6 +15,27 @@ const createTravel = async (
   authorId: string,
   files?: Express.Multer.File[]
 ) => {
+
+   const subscription = await prisma.subscription.findUnique({
+    where:{userId: authorId},
+    select:{
+      active:true,
+      endDate:true,
+      paymentStatus: true,
+    }
+   })
+   
+   if(!subscription || !subscription.active || subscription.endDate < new Date() || subscription.paymentStatus !== "COMPLETED"){
+    throw new Error("Only subscribed users can add reviews.");
+   }
+
+     if (subscription.paymentStatus !== PaymentStatus.COMPLETED) {
+    throw new Error("Subscription payment not completed.");
+  }
+
+
+
+
   if (!authorId) {
     throw new Error("authorId is required");
   }
