@@ -25,7 +25,7 @@ router.patch(
 );
 
 router.get(
-    "/allUser",checkAuth(Role.ADMIN), UserController.AllUser
+    "/allUser", UserController.AllUser
 );
 
 router.get(

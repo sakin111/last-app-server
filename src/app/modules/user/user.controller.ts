@@ -5,9 +5,9 @@ import catchAsync from "../../shared/catchAsync";
 import httpStatus from 'http-status'
 import { sendResponse } from "../../shared/sendResponse";
 import prisma from "../../shared/prisma";
-import { QueryParser } from "../../shared/QueryParser";
+
 import { getUploadedFiles } from "../../shared/fileUploader";
-import AppError from "../../error/AppError";
+
 
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
