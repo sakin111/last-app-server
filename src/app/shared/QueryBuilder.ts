@@ -250,7 +250,7 @@ async build() {
   if (this.take !== undefined) options.take = this.take;
   if (this.skip !== undefined) options.skip = this.skip;
 
-  console.log("FINAL PRISMA OPTIONS:", JSON.stringify(options, null, 2));
+
 
   return await this.model.findMany(options);
 }

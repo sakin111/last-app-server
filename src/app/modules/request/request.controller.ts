@@ -71,7 +71,6 @@ const updateRequestStatus = catchAsync(async (req: Request, res: Response) => {
 
   const { id } = req.params; 
   const { status } = req.body;
-  console.log(status,"this is from update reques");
 
   if (!["ACCEPTED", "REJECTED"].includes(status)) {
     throw new Error("Invalid status. Must be ACCEPTED or REJECTED");

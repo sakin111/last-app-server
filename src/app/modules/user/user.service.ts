@@ -159,6 +159,7 @@ const PublicProfile = async (id: string) => {
 export const getAllFromDB = async () => {
 
   const users = await prisma.user.findMany();
+  console.log(users,"this is from service");
 
   return {
     data: users,

@@ -72,7 +72,6 @@ const getReviewById = catchAsync(async (req: Request, res: Response) => {
 
 const getAllReviews = catchAsync(async (_req: Request, res: Response) => {
   const reviews = await ReviewService.getAllReviews();
-  console.log(reviews);
 
   sendResponse(res, {
     statusCode: 200,

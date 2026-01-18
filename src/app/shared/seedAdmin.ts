@@ -33,11 +33,11 @@ export const seedAdmin = async () => {
             userStatus: UserStatus.ACTIVE
         }
 
-        const admin = await prisma.user.create({
+         await prisma.user.create({
             data: payload as User
         })
         console.log("Admin Created Successfully \n");
-        console.log(admin);
+
     } catch (error) {
         console.log(error);
     }
