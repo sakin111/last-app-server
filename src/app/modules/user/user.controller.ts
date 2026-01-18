@@ -27,6 +27,8 @@ const AllUser = catchAsync(async (req: Request, res: Response) => {
 
   const result = await UserService.getAllFromDB();
   console.log(result,"alluser result");
+  JSON.stringify(result.data);
+
 
   sendResponse(res, {
     statusCode: 200,
