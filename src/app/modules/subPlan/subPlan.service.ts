@@ -55,6 +55,8 @@ const getMySubscription = async (userId: string) => {
     };
   }
 
+  
+
   const isActive =
     subscription.active &&
     subscription.endDate > new Date() &&
