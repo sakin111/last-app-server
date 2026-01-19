@@ -9,23 +9,7 @@ const reviewSearchableFields = ["content"];
 
 const addReview = async (targetId: string, authorId: string, payload: { rating: number; content: string }) => {
  
-   const subscription = await prisma.subscription.findUnique({
-    where:{userId: authorId},
-    select:{
-      active:true,
-      endDate:true,
-      paymentStatus: true,
-    }
-   })
-   
-   if(!subscription || !subscription.active || subscription.endDate < new Date() || subscription.paymentStatus !== "COMPLETED"){
-    throw new Error("Only subscribed users can add reviews.");
-   }
 
-     if (subscription.paymentStatus !== PaymentStatus.COMPLETED) {
-    throw new Error("Subscription payment not completed.");
-  }
- 
   const review = await prisma.review.create({
     data: {
       rating: Number(payload.rating),

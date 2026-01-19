@@ -17,22 +17,6 @@ export const createRequest = async (
 ) => {
   return prisma.$transaction(async (tx) => {
  
-       const subscription = await tx.subscription.findUnique({
-        where:{userId: userId},
-        select:{
-          active:true,
-          endDate:true,
-          paymentStatus: true,
-        }
-       })
-       
-       if(!subscription || !subscription.active || subscription.endDate < new Date() || subscription.paymentStatus !== "COMPLETED"){
-        throw new Error("Only subscribed users can add reviews.");
-       }
-    
-         if (subscription.paymentStatus !== PaymentStatus.COMPLETED) {
-        throw new Error("Subscription payment not completed.");
-      }
 
     const travelPlan = await tx.travelPlan.findUnique({
       where: { id: payload.travelPlanId },

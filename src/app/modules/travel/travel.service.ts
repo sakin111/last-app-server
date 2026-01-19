@@ -16,22 +16,6 @@ const createTravel = async (
   files?: Express.Multer.File[]
 ) => {
 
-   const subscription = await prisma.subscription.findUnique({
-    where:{userId: authorId},
-    select:{
-      active:true,
-      endDate:true,
-      paymentStatus: true,
-    }
-   })
-   
-   if(!subscription || !subscription.active || subscription.endDate < new Date() || subscription.paymentStatus !== "COMPLETED"){
-    throw new Error("Only subscribed users can add reviews.");
-   }
-
-     if (subscription.paymentStatus !== PaymentStatus.COMPLETED) {
-    throw new Error("Subscription payment not completed.");
-  }
 
 
 
