@@ -8,11 +8,11 @@ import { Role, User, UserStatus } from "@prisma/client";
 
 export const seedAdmin = async () => {
     try {
-        const isAdminExist = await prisma.user.findUnique({ 
-            where:{
+        const isAdminExist = await prisma.user.findUnique({
+            where: {
                 email: envVar.ADMIN_EMAIL
             }
-         })
+        })
 
         if (isAdminExist) {
             console.log("Admin Already Exists!");
@@ -23,9 +23,9 @@ export const seedAdmin = async () => {
 
         const hashedPassword = await bcryptjs.hash(envVar.ADMIN_PASS, Number(envVar.JWT_SALT))
 
-    
 
-        const payload:Partial<User>= {
+
+        const payload: Partial<User> = {
             name: "admin",
             role: Role.ADMIN,
             email: envVar.ADMIN_EMAIL,
@@ -33,7 +33,7 @@ export const seedAdmin = async () => {
             userStatus: UserStatus.ACTIVE
         }
 
-         await prisma.user.create({
+        await prisma.user.create({
             data: payload as User
         })
         console.log("Admin Created Successfully \n");

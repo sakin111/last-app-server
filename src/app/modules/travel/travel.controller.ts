@@ -6,41 +6,41 @@ import { getUploadedFiles } from "../../shared/fileUploader";
 import { QueryParser } from "../../shared/QueryParser";
 
 const createTravel = catchAsync(async (req: Request, res: Response) => {
-	 const id = req.user?.id
-	const files = getUploadedFiles(req)
-	const result = await TravelService.createTravel(req.body, id, files);
+  const id = req.user?.id
+  const files = getUploadedFiles(req)
+  const result = await TravelService.createTravel(req.body, id, files);
 
-	sendResponse(res, {
-		statusCode: 201,
-		success: true,
-		message: "Travel plan created",
-		data: result
-	});
+  sendResponse(res, {
+    statusCode: 201,
+    success: true,
+    message: "Travel plan created",
+    data: result
+  });
 });
 
 const getTravel = catchAsync(async (req: Request, res: Response) => {
-	const { id } = req.params;
-	const result = await TravelService.getTravelById(id);
+  const { id } = req.params;
+  const result = await TravelService.getTravelById(id);
 
-	sendResponse(res, {
-		statusCode: 200,
-		success: true,
-		message: "Travel retrieved",
-		data: result
-	});
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Travel retrieved",
+    data: result
+  });
 });
 
 const getAll = catchAsync(async (req: Request, res: Response) => {
-	const query = req.query as Record<string, string>;
-	const result = await TravelService.getAllTravels(query);
+  const query = req.query as Record<string, string>;
+  const result = await TravelService.getAllTravels(query);
 
-	sendResponse(res, {
-		statusCode: 200,
-		success: true,
-		message: "Travels retrieved",
-		meta: result.meta,
-		data: result.data
-	});
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Travels retrieved",
+    meta: result.meta,
+    data: result.data
+  });
 });
 
 const updateTravel = catchAsync(async (req: Request, res: Response) => {
@@ -72,7 +72,7 @@ const deleteTravel = catchAsync(async (req: Request, res: Response) => {
 });
 
 const Travel = catchAsync(async (req: Request, res: Response) => {
- const queryParams = QueryParser.toStringRecord(req.query);
+  const queryParams = QueryParser.toStringRecord(req.query);
   const result = await TravelService.Travel(queryParams);
 
   sendResponse(res, {
@@ -109,15 +109,39 @@ const checkSubscription = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const TravelController = {
-	createTravel,
-	getTravel,
-	getAll,
-	updateTravel,
-	deleteTravel,
-	Travel,
-	myTravel,
-	checkSubscription
+const getAIAdventureRecommendation = catchAsync(async (req: Request, res: Response) => {
+  const result = await TravelService.getAIAdventureRecommendation();
 
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'AI travel recommendation retrieved successfully',
+    data: result
+  });
+});
+
+const askAI = catchAsync(async (req: Request, res: Response) => {
+  const { query } = req.body;
+  const result = await TravelService.askAI(query);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'AI response generated successfully',
+    data: result
+  });
+});
+
+export const TravelController = {
+  createTravel,
+  getTravel,
+  getAll,
+  updateTravel,
+  deleteTravel,
+  Travel,
+  myTravel,
+  checkSubscription,
+  getAIAdventureRecommendation,
+  askAI,
 };
 

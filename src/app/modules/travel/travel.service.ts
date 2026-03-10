@@ -2,13 +2,14 @@
 import { QueryBuilder } from "../../shared/QueryBuilder";
 import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
 import { PaymentStatus, TravelType } from "@prisma/client";
+import OpenAI from "openai";
 import prisma from "../../shared/prisma";
 import AppError from "../../error/AppError";
 import cron from "node-cron"
 
 
 
-const travelSearchableFields = ["title", "destination","description"];
+const travelSearchableFields = ["title", "destination", "description"];
 
 const createTravel = async (
   payload: any,
@@ -25,7 +26,7 @@ const createTravel = async (
   }
 
 
-if (!files || files.length === 0) {
+  if (!files || files.length === 0) {
     throw new Error("No file provided");
   }
 
@@ -144,11 +145,11 @@ const Travel = async (query: Record<string, string>) => {
     .fields()
     .relation({
       author: {
-        select: { 
-          id: true, 
-          email: true, 
-          fullName: true, 
-          name: true, 
+        select: {
+          id: true,
+          email: true,
+          fullName: true,
+          name: true,
           isActive: true,
           profileImage: true
         }
@@ -157,10 +158,10 @@ const Travel = async (query: Record<string, string>) => {
     .addWhere({ isExpired: false })
     .paginate();
 
-        const [data, meta] = await Promise.all([
-        builder.build(),
-        queryBuilder.getMeta()
-    ]);
+  const [data, meta] = await Promise.all([
+    builder.build(),
+    queryBuilder.getMeta()
+  ]);
 
 
   return { data, meta };
@@ -289,6 +290,60 @@ export const checkSubscriptionStatus = async (userId: string) => {
   };
 };
 
+const getOpenAIClient = () => {
+  const apiKey = process.env.OPEN_AI_API_KEY;
+  if (!apiKey) {
+    throw new AppError(500, "OpenAI API key is missing");
+  }
+  return new OpenAI({ apiKey });
+};
+
+const getAIAdventureRecommendation = async () => {
+  const openai = getOpenAIClient();
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "user",
+        content: "the best and crazist travel adventure place",
+      },
+    ],
+  });
+
+  return response.choices[0].message.content;
+};
+
+const askAI = async (query: string) => {
+  if (!query || query.trim().length === 0) {
+    throw new AppError(400, "Query is required");
+  }
+
+  const openai = getOpenAIClient();
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are Travel Buddy AI, a helpful and knowledgeable travel assistant. " +
+          "You specialize in travel recommendations, trip planning, destinations, budgeting, " +
+          "visa info, local culture, safety tips, and adventure ideas. " +
+          "Answer travel-related questions in a friendly and informative way. " +
+          "If the question is not related to travel, you can still help but gently steer " +
+          "the conversation back to travel topics.",
+      },
+      {
+        role: "user",
+        content: query,
+      },
+    ],
+  });
+
+  return response.choices[0].message.content;
+};
+
 export const TravelService = {
   createTravel,
   getTravelById,
@@ -297,6 +352,8 @@ export const TravelService = {
   deleteTravel,
   Travel,
   myTravel,
-  checkSubscriptionStatus
+  checkSubscriptionStatus,
+  getAIAdventureRecommendation,
+  askAI,
 };
 
