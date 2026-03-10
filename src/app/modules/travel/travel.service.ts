@@ -302,7 +302,7 @@ const getAIAdventureRecommendation = async () => {
   const openai = getOpenAIClient();
 
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "qwen/qwen3.5-9b",
     messages: [
       {
         role: "user",
@@ -322,7 +322,7 @@ const askAI = async (query: string) => {
   const openai = getOpenAIClient();
 
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "qwen/qwen3.5-9b",
     messages: [
       {
         role: "system",
