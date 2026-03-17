@@ -6,8 +6,24 @@ import { envVar } from "./app/config/envVar";
 import notFound from "./app/error/notFound";
 import globalErrorHandler from "./app/error/globalErrorHandler";
 import { WebhookController } from "./app/modules/payment/webhook.controller";
+import { Server } from "socket.io";
+import http from "http"
 
 export const app: Application = express();
+
+const server = http.createServer(app)
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+
+  }
+});
+
+io.on("connection", (socket) => {
+
+});
 
 app.set("trust proxy", 1);
 app.use(cors({
@@ -24,6 +40,13 @@ app.post(
 );
 
 app.use(express.json());
+
+
+
+
+
+io.listen(3000);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
