@@ -2,7 +2,7 @@
 import { QueryBuilder } from "../../shared/QueryBuilder";
 import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
 import { PaymentStatus, TravelType } from "@prisma/client";
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "../../shared/prisma";
 import AppError from "../../error/AppError";
 import cron from "node-cron"
@@ -290,28 +290,25 @@ export const checkSubscriptionStatus = async (userId: string) => {
   };
 };
 
-const getOpenAIClient = () => {
-  const apiKey = process.env.OPEN_AI_API_KEY;
+
+
+const getGeminiClient = () => {
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new AppError(500, "OpenAI API key is missing");
+    throw new AppError(500, "Gemini API key is missing");
   }
-  return new OpenAI({ apiKey });
+  return new GoogleGenerativeAI(apiKey);
 };
 
 const getAIAdventureRecommendation = async () => {
-  const openai = getOpenAIClient();
+  const genAI = getGeminiClient();
 
-  const response = await openai.chat.completions.create({
-    model: "qwen/qwen3.5-9b",
-    messages: [
-      {
-        role: "user",
-        content: "the best and crazist travel adventure place",
-      },
-    ],
-  });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  return response.choices[0].message.content;
+  const result = await model.generateContent("the best and crazist travel adventure place");
+  const response = await result.response;
+  
+  return response.text();
 };
 
 const askAI = async (query: string) => {
@@ -319,29 +316,24 @@ const askAI = async (query: string) => {
     throw new AppError(400, "Query is required");
   }
 
-  const openai = getOpenAIClient();
+  const genAI = getGeminiClient();
 
-  const response = await openai.chat.completions.create({
-    model: "qwen/qwen3.5-9b",
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are Travel Buddy AI, a helpful and knowledgeable travel assistant. " +
-          "You specialize in travel recommendations, trip planning, destinations, budgeting, " +
-          "visa info, local culture, safety tips, and adventure ideas. " +
-          "Answer travel-related questions in a friendly and informative way. " +
-          "If the question is not related to travel, you can still help but gently steer " +
-          "the conversation back to travel topics.",
-      },
-      {
-        role: "user",
-        content: query,
-      },
-    ],
+
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+    systemInstruction: 
+      "You are Travel Buddy AI, a helpful and knowledgeable travel assistant. " +
+      "You specialize in travel recommendations, trip planning, destinations, budgeting, " +
+      "visa info, local culture, safety tips, and adventure ideas. " +
+      "Answer travel-related questions in a friendly and informative way. " +
+      "If the question is not related to travel, you can still help but gently steer " +
+      "the conversation back to travel topics.",
   });
 
-  return response.choices[0].message.content;
+  const result = await model.generateContent(query);
+  const response = await result.response;
+
+  return response.text();
 };
 
 export const TravelService = {
