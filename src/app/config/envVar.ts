@@ -6,11 +6,11 @@ export interface interConfig {
     PORT: string,
     NODE_ENV: "development" | "production",
     DATABASE_URL: string,
-    JWT_ACCESS_SECRET: string
-    JWT_SALT: string
-    JWT_REFRESH_SECRET: string
-    JWT_ACCESS_EXPIRE: string
-    JWT_REFRESH_EXPIRE: string
+    JWT_ACCESS_SECRET: string,
+    JWT_SALT: string,
+    JWT_REFRESH_SECRET: string,
+    JWT_ACCESS_EXPIRE: string,
+    JWT_REFRESH_EXPIRE: string,
     ADMIN_EMAIL: string,
     ADMIN_PASS: string,
     CLOUDINARY_API_CLOUD: string,
