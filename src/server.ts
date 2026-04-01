@@ -1,9 +1,12 @@
 import { Server } from 'http'
+import { initSocket } from './app/Socket';
 import { envVar } from './app/config/envVar'
 import { seedAdmin } from './app/shared/seedAdmin'
 import { app } from './app'
 import prisma from './app/shared/prisma'
+
 import { startTravelCleanupJob, startTravelExpireJob } from './app/modules/travel/travel.service'
+import { connectRedis } from './app/shared/redis';
 
 
 
@@ -13,14 +16,17 @@ import { startTravelCleanupJob, startTravelExpireJob } from './app/modules/trave
 
 
 
-let server: Server
+
+export let server: Server
 
 const StartServer = async () =>{
     try {
         await prisma.$connect()
         console.log("connected to DB")
+        await connectRedis();
         server = app.listen(envVar.PORT, () => {
             console.log(`server is running on the port ${envVar.PORT}` )
+            initSocket();
         })
 
     } catch (error) {
