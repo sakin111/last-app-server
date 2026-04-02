@@ -359,7 +359,7 @@ const askAI = async (query: string) => {
   return result.conversation?.generated_responses?.[0] || "Sorry, I couldn't process your question right now.";
 };
 
-export {
+export const TravelService = {
   createTravel,
   getTravelById,
   getAllTravels,
