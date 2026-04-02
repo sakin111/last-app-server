@@ -13,7 +13,7 @@ import validateRequest from "../../middleware/validateRequest";
 const router = express.Router();
 
 router.get("/ai-recommendation", TravelController.getAIAdventureRecommendation);
-router.post("/ask-ai", checkAuth(Role.USER), TravelController.askAI);
+router.post("/ask-ai", TravelController.askAI);
 router.get("/subscription-status", checkAuth(Role.USER), TravelController.checkSubscription);
 router.get("/getAll", checkAuth(Role.ADMIN), TravelController.getAll);
 router.get("/getTravel", optionalAuth, TravelController.Travel);

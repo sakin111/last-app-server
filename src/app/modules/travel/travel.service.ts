@@ -2,7 +2,6 @@
 import { QueryBuilder } from "../../shared/QueryBuilder";
 import { uploadMultipleToCloudinary } from "../../shared/cloudinary";
 import { PaymentStatus, TravelType } from "@prisma/client";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "../../shared/prisma";
 import AppError from "../../error/AppError";
 import cron from "node-cron"
@@ -167,7 +166,7 @@ const Travel = async (query: Record<string, string>) => {
   return { data, meta };
 };
 
-export const myTravel = async (userId: string) => {
+const myTravel = async (userId: string) => {
   const travels = await prisma.travelPlan.findMany({
     where: {
       authorId: userId,
@@ -272,7 +271,7 @@ const getAllTravels = async (query: Record<string, string>) => {
   return { data, meta };
 };
 
-export const checkSubscriptionStatus = async (userId: string) => {
+const checkSubscriptionStatus = async (userId: string) => {
   const subscription = await prisma.subscription.findUnique({
     where: { userId },
     select: {
@@ -292,23 +291,38 @@ export const checkSubscriptionStatus = async (userId: string) => {
 
 
 
-const getGeminiClient = () => {
-  const apiKey = process.env.GEMINI_API_KEY;
+const getAIClient = () => {
+  const apiKey = process.env.HUGGINGFACE_API_KEY;
   if (!apiKey) {
-    throw new AppError(500, "Gemini API key is missing");
+    throw new AppError(500, "Hugging Face API key is missing");
   }
-  return new GoogleGenerativeAI(apiKey);
+  return apiKey;
 };
 
 const getAIAdventureRecommendation = async () => {
-  const genAI = getGeminiClient();
+  const apiKey = getAIClient();
 
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const response = await fetch("https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      inputs: "Suggest 5 amazing travel adventure destinations with brief descriptions.",
+      parameters: {
+        max_length: 200,
+        temperature: 0.7,
+      },
+    }),
+  });
 
-  const result = await model.generateContent("the best and crazist travel adventure place");
-  const response = await result.response;
-  
-  return response.text();
+  if (!response.ok) {
+    throw new AppError(500, "Failed to get AI recommendation");
+  }
+
+  const result = await response.json();
+  return result[0]?.generated_text || "Sorry, I couldn't generate recommendations right now.";
 };
 
 const askAI = async (query: string) => {
@@ -316,27 +330,36 @@ const askAI = async (query: string) => {
     throw new AppError(400, "Query is required");
   }
 
-  const genAI = getGeminiClient();
+  const apiKey = getAIClient();
 
-
-  const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-    systemInstruction: 
-      "You are Travel Buddy AI, a helpful and knowledgeable travel assistant. " +
-      "You specialize in travel recommendations, trip planning, destinations, budgeting, " +
-      "visa info, local culture, safety tips, and adventure ideas. " +
-      "Answer travel-related questions in a friendly and informative way. " +
-      "If the question is not related to travel, you can still help but gently steer " +
-      "the conversation back to travel topics.",
+  const response = await fetch("https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      inputs: {
+        past_user_inputs: ["Hello, I'm looking for travel advice."],
+        generated_responses: ["Hi! I'd be happy to help with travel recommendations and tips."],
+        text: query
+      },
+      parameters: {
+        max_length: 500,
+        temperature: 0.7,
+      },
+    }),
   });
 
-  const result = await model.generateContent(query);
-  const response = await result.response;
+  if (!response.ok) {
+    throw new AppError(500, "Failed to get AI response");
+  }
 
-  return response.text();
+  const result = await response.json();
+  return result.conversation?.generated_responses?.[0] || "Sorry, I couldn't process your question right now.";
 };
 
-export const TravelService = {
+export {
   createTravel,
   getTravelById,
   getAllTravels,

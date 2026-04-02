@@ -19,14 +19,14 @@ export interface interConfig {
     STRIPE_SECRET_KEY: string,
     FRONTEND_URL: string,
     STRIPE_WEBHOOK_SECRET: string,
-    GEMINI_API_KEY: string,
+    HUGGINGFACE_API_KEY: string,
     REDIS_URL: string,
     REDIS_PORT: string,
     REDIS_PASSWORD: string
 }
 
 const envProvider = (): interConfig => {
-    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV', 'JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE', 'JWT_REFRESH_EXPIRE','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD', 'CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY', 'FRONTEND_URL','STRIPE_WEBHOOK_SECRET','GEMINI_API_KEY','REDIS_URL', 'REDIS_PORT','REDIS_PASSWORD']
+    const configKey: string[] = ['PORT','DATABASE_URL','NODE_ENV', 'JWT_ACCESS_SECRET','JWT_REFRESH_SECRET','JWT_SALT','JWT_ACCESS_EXPIRE', 'JWT_REFRESH_EXPIRE','ADMIN_EMAIL','ADMIN_PASS','CLOUDINARY_API_CLOUD', 'CLOUDINARY_API_KEY','CLOUDINARY_API_SECRET','STRIPE_SECRET_KEY', 'FRONTEND_URL','STRIPE_WEBHOOK_SECRET','HUGGINGFACE_API_KEY','REDIS_URL', 'REDIS_PORT','REDIS_PASSWORD']
     configKey.forEach((key) => {
         if (!process.env[key]) {
             throw new Error(`Missing environment variable: ${key}`);
@@ -50,7 +50,7 @@ const envProvider = (): interConfig => {
         STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
         FRONTEND_URL: process.env.FRONTEND_URL as string,
         STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET as string,
-        GEMINI_API_KEY: process.env.GEMINI_API_KEY as string,
+        HUGGINGFACE_API_KEY: process.env.HUGGINGFACE_API_KEY as string,
         REDIS_URL: process.env.REDIS_URL as string,
         REDIS_PORT: process.env.REDIS_PORT as string,
         REDIS_PASSWORD: process.env.REDIS_PASSWORD as string
