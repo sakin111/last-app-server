@@ -300,29 +300,97 @@ const getAIClient = () => {
 };
 
 const getAIAdventureRecommendation = async () => {
-  const apiKey = getAIClient();
+  const buildRecommendation = (line: string, index: number) => {
+    const text = line.trim().replace(/^[0-9]+\.\s*/, "");
+    return {
+      id: `rec-${index}`,
+      title: text.slice(0, 45),
+      description: text,
+      location: "Unknown",
+      type: "Adventure",
+      difficulty: "Moderate",
+    };
+  };
 
-  const response = await fetch("https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
+  const fallbackRecommendations = [
+    {
+      id: "rec-1",
+      title: "Bangkok, Thailand",
+      description: "Vibrant street food and ancient temples.",
+      location: "Bangkok",
+      type: "Adventure",
+      difficulty: "Easy",
     },
-    body: JSON.stringify({
-      inputs: "Suggest 5 amazing travel adventure destinations with brief descriptions.",
-      parameters: {
-        max_length: 200,
-        temperature: 0.7,
+    {
+      id: "rec-2",
+      title: "Tokyo, Japan",
+      description: "Modern technology meets ancient traditions.",
+      location: "Tokyo",
+      type: "Adventure",
+      difficulty: "Moderate",
+    },
+    {
+      id: "rec-3",
+      title: "Barcelona, Spain",
+      description: "Architecture and Mediterranean beaches.",
+      location: "Barcelona",
+      type: "Adventure",
+      difficulty: "Moderate",
+    },
+    {
+      id: "rec-4",
+      title: "Bali, Indonesia",
+      description: "Tropical paradise with rich culture.",
+      location: "Bali",
+      type: "Adventure",
+      difficulty: "Easy",
+    },
+    {
+      id: "rec-5",
+      title: "New Zealand",
+      description: "Adventure capital with stunning landscapes.",
+      location: "New Zealand",
+      type: "Adventure",
+      difficulty: "Challenging",
+    },
+  ];
+
+  try {
+    const apiKey = getAIClient();
+
+    const response = await fetch("https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
       },
-    }),
-  });
+      body: JSON.stringify({
+        inputs: "Suggest 5 amazing travel adventure destinations with brief descriptions.",
+        parameters: {
+          max_length: 200,
+          temperature: 0.7,
+        },
+      }),
+    });
 
-  if (!response.ok) {
-    throw new AppError(500, "Failed to get AI recommendation");
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Hugging Face API Error:", response.status, errorText);
+      return fallbackRecommendations;
+    }
+
+    const result = await response.json();
+    const text = result?.[0]?.generated_text || "";
+    const lines = text.split(/\n+/).map((line: string) => line.trim()).filter(Boolean);
+    if (lines.length === 0) {
+      return fallbackRecommendations;
+    }
+
+    return lines.slice(0, 5).map(buildRecommendation);
+  } catch (error) {
+    console.error("getAIAdventureRecommendation Error:", error);
+    return fallbackRecommendations;
   }
-
-  const result = await response.json();
-  return result[0]?.generated_text || "Sorry, I couldn't generate recommendations right now.";
 };
 
 const askAI = async (query: string) => {
@@ -330,33 +398,40 @@ const askAI = async (query: string) => {
     throw new AppError(400, "Query is required");
   }
 
-  const apiKey = getAIClient();
+  try {
+    const apiKey = getAIClient();
 
-  const response = await fetch("https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      inputs: {
-        past_user_inputs: ["Hello, I'm looking for travel advice."],
-        generated_responses: ["Hi! I'd be happy to help with travel recommendations and tips."],
-        text: query
+    const response = await fetch("https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
       },
-      parameters: {
-        max_length: 500,
-        temperature: 0.7,
-      },
-    }),
-  });
+      body: JSON.stringify({
+        inputs: {
+          past_user_inputs: ["Hello, I'm looking for travel advice."],
+          generated_responses: ["Hi! I'd be happy to help with travel recommendations and tips."],
+          text: query
+        },
+        parameters: {
+          max_length: 500,
+          temperature: 0.7,
+        },
+      }),
+    });
 
-  if (!response.ok) {
-    throw new AppError(500, "Failed to get AI response");
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Hugging Face API Error:", response.status, errorText);
+      return `I received your question about "${query}" but I'm currently overloaded. Please try again later!`;
+    }
+
+    const result = await response.json();
+    return result.conversation?.generated_responses?.[0] || "Sorry, I couldn't process your question right now.";
+  } catch (error) {
+    console.error("askAI Error:", error);
+    return `That's a great question about travel! For the best advice, I recommend:\n1. Checking travel guides specific to your destination\n2. Reading reviews from other travelers\n3. Contacting local tourism boards\n4. Consulting with travel agents`;
   }
-
-  const result = await response.json();
-  return result.conversation?.generated_responses?.[0] || "Sorry, I couldn't process your question right now.";
 };
 
 export const TravelService = {
