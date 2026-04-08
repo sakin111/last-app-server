@@ -321,7 +321,7 @@ Format:
 
   const lines = text.split("\n").filter(Boolean);
 
-  return lines.slice(0, 5).map((line: any, i) => {
+  return lines.slice(0, 5).map((line: any, i: any) => {
     const clean = line.replace(/^[0-9]+\.\s*/, "");
     const [title, description] = clean.split(" - ");
 
